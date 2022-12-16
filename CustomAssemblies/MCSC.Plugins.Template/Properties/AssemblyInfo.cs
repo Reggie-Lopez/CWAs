@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CustomAssemblies")]
+[assembly: AssemblyTitle("MCSC.Plugins.Template")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CustomAssemblies")]
+[assembly: AssemblyProduct("MCSC.Plugins.Template")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9fa36d3f-d2f7-4b26-a2a5-fdee53db7015")]
+[assembly: Guid("7f663fb9-38c7-47f0-bfd0-e32d02a0951a")]
 
 // Version information for an assembly consists of the following four values:
 //
