@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JavaScript", "JavaScript", 
 	ProjectSection(SolutionItems) = preProject
 		JavaScript\form_template.js = JavaScript\form_template.js
 		JavaScript\ribbon_template.js = JavaScript\ribbon_template.js
+		JavaScript\som_case_ribbon.js = JavaScript\som_case_ribbon.js
+		JavaScript\som_case.js = JavaScript\som_case.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HTML", "HTML", "{3FE548EF-463D-487C-82BF-59F7B79048F4}"
