@@ -18,20 +18,30 @@ function CheckCorrectForm(context) {
     var formSaveType = formContext.ui.getFormType();
     //get current form
     var formItem = formContext.ui.formSelector.getCurrentItem();
+
     //check if the record has been saved and it's STILL on the entry form. redirect to correct form
     if (formItem.getLabel() == "Entry" && formSaveType != 1) {
         ChangeForm(formContext);
     }
+
+    //check if the current form is NOT Entry and it's a new record
+    if (formItem.getLabel() != "Entry" && formSaveType == 1) {
+        ChangeForm(formContext, true);
+    }
+
 }
 
 
-function ChangeForm(formContext) {
+function ChangeForm(formContext, changeToEntryForm) {
     //get casetype optionset
     var caseType = formContext.getAttribute("casetypecode");
 
     if (caseType != null) {
         //get text value of optionset
         var formNameToChangeTo = caseType.getText();
+        //override if the ChangeToEntryForm is true
+        if (changeToEntryForm) { formNameToChangeTo = "Entry"; }
+             
         //get all forms
         var allForms = formContext.ui.formSelector.items.get();
         //loop through all forms and set to the form that was selected in the casetype optionset
