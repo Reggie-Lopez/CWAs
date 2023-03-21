@@ -25,17 +25,22 @@ function case_OnSave(context) {
 function ChangeToCorrectForm(context) {
     //get current form
     var formContext = context.getFormContext();
-    var formContext = context.getFormContext();
 
     //get current form
     var formSaveType = formContext.ui.getFormType();    
     var formItem = formContext.ui.formSelector.getCurrentItem();   
 
     var formToChangeTo;
+    var caseType = formContext.getAttribute("som_casetype").getValue();
 
     //if the current form is Entry but the record is already saved then change to appropriate form
-    if (formItem.getLabel() == "Entry" && formSaveType != 1) {
+    if (formItem.getLabel() == "Entry" && caseType != null && formSaveType != 1) {
         formToChangeTo = GetForm(context);
+    }
+
+    //if the case type is empty but it happens to already have been created
+    if (formItem.getLabel() != "Entry" && caseType == null && formSaveType != 1) {
+        formToChangeTo = GetForm(context, "Entry");
     }
 
     //if the current form is NOT Entry and the record has not been saved yet
@@ -58,12 +63,12 @@ function GetForm(context, formOverrride) {
     if (formOverrride) { caseTypeLookupName = "Entry"; }
 
     //get case type lookup 
-    var caseType = formContext.getAttribute("som_casetype");
-    var caseTypeLookup = caseType.getValue();
-    if (caseTypeLookup != null) {
+    var caseType = formContext.getAttribute("som_casetype").getValue();
+    if (caseType != null) {
         //get case type lookup name
-        caseTypeLookupName = caseTypeLookup[0].name;
+        caseTypeLookupName = caseType[0].name;
     }
+
     //get all forms
     var allForms = formContext.ui.formSelector.items.get();
     //loop through all forms and set to the form that was selected in the casetype lookup
