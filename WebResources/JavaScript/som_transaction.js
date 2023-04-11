@@ -3,8 +3,6 @@ function transaction_OnLoad(executionContext) {
 
     var formContext = executionContext.getFormContext();
 
-    formContext.getAttribute('som_secondarycategory').addOnChange(secondarycategory_OnChange);
-
     //default Position field
     setPosition(executionContext);
 }
