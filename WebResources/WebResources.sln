@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JavaScript", "JavaScript", 
 		JavaScript\ribbon_template.js = JavaScript\ribbon_template.js
 		JavaScript\som_case.js = JavaScript\som_case.js
 		JavaScript\som_case_ribbon.js = JavaScript\som_case_ribbon.js
+		JavaScript\som_transaction.js = JavaScript\som_transaction.js
 		JavaScript\som_workcategory.js = JavaScript\som_workcategory.js
 	EndProjectSection
 EndProject
