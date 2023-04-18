@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
 
-namespace MCSC.Plugins.Template
+namespace MCSC.Plugin.Template
 {
     public class DoSomething : IPlugin
     {

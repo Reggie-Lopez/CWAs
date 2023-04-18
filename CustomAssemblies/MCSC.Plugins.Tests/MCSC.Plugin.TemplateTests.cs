@@ -8,9 +8,9 @@ using System;
 using System.IO;
 using Xunit;
 
-using TargetAssembly = MCSC.Plugins.Template;
+using TargetAssembly = MCSC.Plugin.Template;
 
-namespace MCSC.Plugins.Tests
+namespace MCSC.Plugin.Tests
 {
     public class TemplateTests : IDisposable
     {

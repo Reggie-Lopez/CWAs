@@ -7,7 +7,7 @@ using Microsoft.Xrm.Sdk.Workflow;
 using Microsoft.Xrm.Sdk;
 using System.Activities;
 
-namespace MCSC.CWAs.Template
+namespace MCSC.CWA.Template
 {
     public class DoSomething : CodeActivity
     {

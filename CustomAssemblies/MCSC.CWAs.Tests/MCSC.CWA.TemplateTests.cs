@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-using TargetAssembly = MCSC.CWAs.Template;
+using TargetAssembly = MCSC.CWA.Template;
 
-namespace MCSC.CWAs.Tests
+namespace MCSC.CWA.Tests
 {
     public class TemplateTests : IDisposable
     {

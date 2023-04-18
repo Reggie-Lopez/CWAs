@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MCSC.CWA.Template")]
+[assembly: AssemblyTitle("MCSC.Plugin.ConvertEmailToTransaction")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MCSC.CWA.Template")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyProduct("MCSC.Plugin.ConvertEmailToTransaction")]
+[assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("db2cbd5f-d244-4d62-a553-ce8223d85b24")]
+[assembly: Guid("146fe6de-f04e-417a-9e4a-21272c25b133")]
 
 // Version information for an assembly consists of the following four values:
 //

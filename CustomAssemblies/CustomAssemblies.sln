@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBed", "TestBed\TestBed.csproj", "{909CA78B-677A-4DAF-9AD4-F6F0DCACA42B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugins.Template", "MCSC.Plugins.Template\MCSC.Plugins.Template.csproj", "{7F663FB9-38C7-47F0-BFD0-E32D02A0951A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Template", "MCSC.Plugins.Template\MCSC.Plugin.Template.csproj", "{7F663FB9-38C7-47F0-BFD0-E32D02A0951A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWAs.Template", "MCSC.CWAs.Template\MCSC.CWAs.Template.csproj", "{DB2CBD5F-D244-4D62-A553-CE8223D85B24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Template", "MCSC.CWAs.Template\MCSC.CWA.Template.csproj", "{DB2CBD5F-D244-4D62-A553-CE8223D85B24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWAs.Tests", "MCSC.CWAs.Tests\MCSC.CWAs.Tests.csproj", "{450AC897-D574-4270-A72D-0679FB289003}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Tests", "MCSC.CWAs.Tests\MCSC.CWA.Tests.csproj", "{450AC897-D574-4270-A72D-0679FB289003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugins.Tests", "MCSC.Plugins.Tests\MCSC.Plugins.Tests.csproj", "{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Tests", "MCSC.Plugins.Tests\MCSC.Plugin.Tests.csproj", "{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.ConvertEmailToTransaction", "MCSC.Plugin.ConvertEmailToTransaction\MCSC.Plugin.ConvertEmailToTransaction.csproj", "{146FE6DE-F04E-417A-9E4A-21272C25B133}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{146FE6DE-F04E-417A-9E4A-21272C25B133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{146FE6DE-F04E-417A-9E4A-21272C25B133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{146FE6DE-F04E-417A-9E4A-21272C25B133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{146FE6DE-F04E-417A-9E4A-21272C25B133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
