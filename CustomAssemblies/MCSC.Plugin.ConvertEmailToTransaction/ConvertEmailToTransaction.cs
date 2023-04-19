@@ -31,14 +31,20 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
 
             foreach (var attId in attIdsSplit) { attachmentIdList.Add(Guid.Parse(attId)); }
 
-            //create new Transaction record, keep GUID
-            var transactionId = CreateTransactionRecord(service);
+            var transactionId = context.InputParameters["ExistingTransactionId"].ToString();
+
+            //check if ExistingTransactionId is provided
+            if (string.IsNullOrEmpty(transactionId))
+            {
+                //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
+                transactionId = CreateTransactionRecord(service); 
+            }         
 
             //loop through each attachmentid in list and create a note, attach file
-            CreateNotesWithAttachment(service, transactionId, attachmentIdList);
+            CreateNotesWithAttachment(service, Guid.Parse(transactionId), attachmentIdList);
 
             //pass the transactionid as the output parameter back to the JS that called the action
-            context.OutputParameters["TransactionId"] = transactionId;
+            context.OutputParameters["RedirectTransactionId"] = transactionId;
         }
 
 
@@ -68,14 +74,14 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 }
                 catch (Exception ex)
                 {
-                    _trace.Trace("Error creating note/attachment: " + ex.Message);
+                    _trace.Trace("Error creating note/attachment on Transaction (" + transactionId.ToString() + "): " + ex.Message);
                     throw ex;
                 }
             }   
         }
 
 
-        private Guid CreateTransactionRecord(IOrganizationService service)
+        private string CreateTransactionRecord(IOrganizationService service)
         {
             try
             {
@@ -84,7 +90,7 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 transactionRec["som_commentsdescription"] = "This record was generated from an Email.";
                 var transactionId = service.Create(transactionRec);
 
-                return transactionId;
+                return transactionId.ToString();
             }
             catch (Exception ex)
             {
