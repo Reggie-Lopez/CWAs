@@ -31,10 +31,10 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
 
             foreach (var attId in attIdsSplit) { attachmentIdList.Add(Guid.Parse(attId)); }
 
-            var transactionId = context.InputParameters["ExistingTransactionId"].ToString();
+            var transactionId = (string)context.InputParameters["ExistingTransactionId"];
 
             //check if ExistingTransactionId is provided
-            if (string.IsNullOrEmpty(transactionId))
+            if (transactionId == null)
             {
                 //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
                 transactionId = CreateTransactionRecord(service); 
