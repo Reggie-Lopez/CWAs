@@ -7,8 +7,8 @@
     <ProjectGuid>{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MCSC.Plugins.Tests</RootNamespace>
-    <AssemblyName>MCSC.Plugins.Tests</AssemblyName>
+    <RootNamespace>MCSC.Plugin.Tests</RootNamespace>
+    <AssemblyName>MCSC.Plugin.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -96,7 +96,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MCSC.Plugins.Template\MCSC.Plugin.Template.csproj">
+    <ProjectReference Include="..\MCSC.Plugin.Template\MCSC.Plugin.Template.csproj">
       <Project>{7f663fb9-38c7-47f0-bfd0-e32d02a0951a}</Project>
       <Name>MCSC.Plugin.Template</Name>
     </ProjectReference>
