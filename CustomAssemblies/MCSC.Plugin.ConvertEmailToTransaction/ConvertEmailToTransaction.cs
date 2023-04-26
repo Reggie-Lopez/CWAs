@@ -37,7 +37,16 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
             if (transactionId == null)
             {
                 //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
-                transactionId = CreateTransactionRecord(service); 
+                transactionId = CreateTransactionRecord(service, emailId); 
+            }
+            else
+            {                
+                //update existing transaction to populate the email lookup
+                //doing it like this so it's only one audit rec created instead of a create and THEN an update
+                var transRec = new Entity("som_transaction");
+                transRec["som_transactionid"] = new EntityReference("som_transaction", Guid.Parse(transactionId));
+                transRec["som_email"] = emailId;
+                service.Create(transRec);
             }         
 
             //loop through each attachmentid in list and create a note, attach file
@@ -81,14 +90,15 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
         }
 
 
-        private string CreateTransactionRecord(IOrganizationService service)
+        private string CreateTransactionRecord(IOrganizationService service, EntityReference emailId)
         {
             try
             {
                 //create new essentially-blank Transaction record, return the id
-                var transactionRec = new Entity("som_transaction");
-                transactionRec["som_commentsdescription"] = "This record was generated from an Email.";
-                var transactionId = service.Create(transactionRec);
+                var transRec = new Entity("som_transaction");
+                transRec["som_commentsdescription"] = "This record was generated from an Email.";
+                transRec["som_email"] = emailId;
+                var transactionId = service.Create(transRec);
 
                 return transactionId.ToString();
             }
