@@ -69,8 +69,6 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                     var subject = "";
                     if (retAttachment.Contains("subject")) { subject = retAttachment["subject"].ToString(); }
 
-                    var test = retAttachment["filename"].ToString();
-
                     //create new note using the attachment properties
                     var note = new Entity("annotation");
                     note["objectid"] = new EntityReference("som_transaction", transactionId);
