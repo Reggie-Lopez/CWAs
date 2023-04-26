@@ -5,17 +5,17 @@ VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBed", "TestBed\TestBed.csproj", "{909CA78B-677A-4DAF-9AD4-F6F0DCACA42B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Template", "MCSC.Plugins.Template\MCSC.Plugin.Template.csproj", "{7F663FB9-38C7-47F0-BFD0-E32D02A0951A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Template", "MCSC.Plugin.Template\MCSC.Plugin.Template.csproj", "{7F663FB9-38C7-47F0-BFD0-E32D02A0951A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Template", "MCSC.CWAs.Template\MCSC.CWA.Template.csproj", "{DB2CBD5F-D244-4D62-A553-CE8223D85B24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Template", "MCSC.CWA.Template\MCSC.CWA.Template.csproj", "{DB2CBD5F-D244-4D62-A553-CE8223D85B24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Tests", "MCSC.CWAs.Tests\MCSC.CWA.Tests.csproj", "{450AC897-D574-4270-A72D-0679FB289003}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.Tests", "MCSC.CWA.Tests\MCSC.CWA.Tests.csproj", "{450AC897-D574-4270-A72D-0679FB289003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Tests", "MCSC.Plugins.Tests\MCSC.Plugin.Tests.csproj", "{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.Tests", "MCSC.Plugin.Tests\MCSC.Plugin.Tests.csproj", "{7C462BEA-CB6B-4061-B0FC-8E8368BABE3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.ConvertEmailToTransaction", "MCSC.Plugin.ConvertEmailToTransaction\MCSC.Plugin.ConvertEmailToTransaction.csproj", "{146FE6DE-F04E-417A-9E4A-21272C25B133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.CheckUserHasRoles", "MCSC.CWAs.CheckUserHasRoles\MCSC.CWA.CheckUserHasRoles.csproj", "{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.CheckUserHasRoles", "MCSC.CWA.CheckUserHasRoles\MCSC.CWA.CheckUserHasRoles.csproj", "{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
