@@ -45,9 +45,9 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 //update existing transaction to populate the email lookup
                 //doing it like this so it's only one audit rec created instead of a create and THEN an update
                 var transRec = new Entity("som_transaction");
-                transRec["som_transactionid"] = new EntityReference("som_transaction", Guid.Parse(transactionId));
+                transRec["som_transactionid"] = Guid.Parse(transactionId);
                 transRec["som_email"] = emailId;
-                service.Create(transRec);
+                service.Update(transRec);
             }         
 
             //loop through each attachmentid in list and create a note, attach file
