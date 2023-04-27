@@ -3,10 +3,10 @@ function ConvertToTransaction_Action(primaryControl, selectedControlSelectedItem
 
     var formContext = primaryControl;
 
-    var selectedRows = formContext.getControl('attachmentsGrid')?.getGrid()?.getSelectedRows();
+    var selectedAttachments = formContext.getControl('attachmentsGrid')?.getGrid()?.getSelectedRows();
 
     attachments = []
-    selectedRows.forEach(row => attachments.push(row?.getData()?.getEntity()?.getId()?.replace("{", "")?.replace("}", "")));
+    selectedAttachments.forEach(row => attachments.push(row?.getData()?.getEntity()?.getId()?.replace("{", "")?.replace("}", "")));
 
     var title = "Convert Email to Transaction";
 
@@ -29,9 +29,36 @@ function ConvertToTransaction_Action(primaryControl, selectedControlSelectedItem
         return;
     }
 
+    var selectedTransactions = formContext.getControl('transactionsGrid')?.getGrid()?.getSelectedRows();
+
+    transactions = []
+    selectedTransactions.forEach(row => transactions.push({
+        id: row?.getData()?.getEntity()?.getId()?.replace("{", "")?.replace("}", ""),
+        name: row?.getData()?.getEntity()?.getPrimaryAttributeValue()
+    }));
+
+    if (transactions.length > 1) {
+
+        var alertStrings = {
+            title: title,
+            text: "You may only select one transaction.",
+            confirmButtonLabel: "OK"
+        };
+
+        var alertOptions = { height: 200, width: 500 };
+
+        Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(success => {
+
+        }, error => {
+            console.log(error.message);
+        });
+
+        return;
+    }
+
     var csvAttachments = attachments.join();
 
-    var transaction = formContext.getAttribute('som_transaction')?.getValue()?.[0] ?? {};
+    var transaction = transactions?.[0] ?? {};
 
     var text = `Are you sure you'd like to add ${attachments.length} selected files into a new transaction?`
     
