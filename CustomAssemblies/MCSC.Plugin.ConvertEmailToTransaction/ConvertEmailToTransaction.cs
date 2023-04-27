@@ -20,13 +20,14 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
             //confirm inputparameters exist
             if (context.InputParameters == null) { throw new InvalidPluginExecutionException("Input Parameters are not being passed into this plugin."); }
             if (context.InputParameters["AttachmentIdList"] == null) { throw new InvalidPluginExecutionException("The AttachmentIdList Input Parameter is missing for this plugin."); }
+            if (context.InputParameters["Target"] == null) { throw new InvalidPluginExecutionException("The Target Input Parameter is missing for this plugin."); }
 
             //email Target Parameter
             var emailId = (EntityReference)context.InputParameters["Target"];
 
             //attachment InputParameter
-            var attachmentIds = context.InputParameters["AttachmentIdList"].ToString();
             var attachmentIdList = new List<Guid>();
+            var attachmentIds = context.InputParameters["AttachmentIdList"].ToString();            
             var attIdsSplit = attachmentIds.Split(',');
 
             foreach (var attId in attIdsSplit) { attachmentIdList.Add(Guid.Parse(attId)); }
