@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.ConvertEmailToT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.CheckUserHasRoles", "MCSC.CWA.CheckUserHasRoles\MCSC.CWA.CheckUserHasRoles.csproj", "{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.AddCaseworkerToLoA", "MCSC.Plugin.AddCaseworkerToLoA\MCSC.Plugin.AddCaseworkerToLoA.csproj", "{607133F8-1BE3-4E03-BA04-3D20DAE1AAFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BAA6D8D-BA16-40B6-8287-B95C1B1E034D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{607133F8-1BE3-4E03-BA04-3D20DAE1AAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{607133F8-1BE3-4E03-BA04-3D20DAE1AAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{607133F8-1BE3-4E03-BA04-3D20DAE1AAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{607133F8-1BE3-4E03-BA04-3D20DAE1AAFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
