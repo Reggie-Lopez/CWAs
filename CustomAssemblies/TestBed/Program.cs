@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace TestBed
@@ -15,28 +16,24 @@ namespace TestBed
         {
             #region Connection
 
-            var url = ConfigurationManager.AppSettings["dev"];
-            var username = ConfigurationManager.AppSettings["CRM_User"];
-            var password = ConfigurationManager.AppSettings["CRM_Password"];
-            var appId = ConfigurationManager.AppSettings["CRM_AppId"];
-            var redirectUri = ConfigurationManager.AppSettings["CRM_RedirectURI"];
+            var url = ConfigurationManager.AppSettings["CRM_URL"];
+            var clientId = ConfigurationManager.AppSettings["CRM_ClientId"];
+            var clientSecret = ConfigurationManager.AppSettings["CRM_ClientSecret"];
 
-            var connectionString = "authtype=OAuth;" +
-                $"Username={username};" +
-                $"Password={password};" +
+            var connectionString = "authtype=ClientSecret;" +
                 $"Url={url};" +
-                $"AppId={appId};" +
-                $"RedirectUri={redirectUri};" +
-                $"LoginPrompt=Never;";
+                $"ClientId={clientId};" +
+                $"ClientSecret={clientSecret};";
 
             var serviceClient = new CrmServiceClient(connectionString);
 
             var service = serviceClient.OrganizationWebProxyClient
                 ?? (IOrganizationService)serviceClient.OrganizationServiceProxy;
 
-            if (service == null) throw new Exception($"Connection to CRM could not be established.");
+            if (service == null) throw new Exception($"The connection could not be established to {url}. Connection string: '{connectionString}'");
 
             #endregion
+
 
         }
     }
