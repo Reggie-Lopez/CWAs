@@ -17,38 +17,40 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
-            var target = (Entity)context.InputParameters?["Target"];
-            if (target == null) return;
-
-            var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype"));
-
-            var contactRef = caseRecord.GetAttributeValue<EntityReference>("primarycontactid");
-            var contact = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_processlevel"));
-            var processLevel = contact.GetAttributeValue<string>("som_processlevel");
-
-            var excludeProcessLevels = new List<string>()
+            try
             {
+                var target = (Entity)context.InputParameters?["Target"];
+                if (target == null) return;
 
-            };
+                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype"));
 
-            if (excludeProcessLevels.Contains(processLevel)) return;
+                var contactRef = caseRecord.GetAttributeValue<EntityReference>("primarycontactid");
+                var contact = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_processlevel"));
+                var processLevel = contact.GetAttributeValue<string>("som_processlevel");
 
-            var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-            var caseType = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_name"));
-            var caseTypeName = caseType.GetAttributeValue<string>("som_name");
+                var excludeProcessLevels = new List<string>()
+                {
 
-            var caseTypeNames = new List<string>()
-            {
-                "Leave of Absense",
-                "Workers' Compensation"
-            };
+                };
 
-            if (!caseTypeName.Contains(caseTypeName)) return;
+                if (excludeProcessLevels.Contains(processLevel)) return;
 
-            var caseWorkerCaseQuery = new QueryExpression("systemuser")
-            {
-                ColumnSet = new ColumnSet("som_capacity"),
-                LinkEntities =
+                var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
+                var caseType = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_name"));
+                var caseTypeName = caseType.GetAttributeValue<string>("som_name");
+
+                var caseTypeNames = new List<string>()
+                {
+                    "Leave of Absense",
+                    "Workers' Compensation"
+                };
+
+                if (!caseTypeName.Contains(caseTypeName)) return;
+
+                var caseWorkerCaseQuery = new QueryExpression("systemuser")
+                {
+                    ColumnSet = new ColumnSet("som_capacity"),
+                    LinkEntities =
                 {
                     new LinkEntity("systemuser", "som_caseassignment", "systemuserid", "som_assigneeid", JoinOperator.Inner)
                     {
@@ -74,34 +76,28 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                         }
                     }
                 }
-            };
+                };
 
-            var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
+                var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
 
-            IEnumerable<dynamic> caseWorkers = caseWorkerCases?.GroupBy(x => x.Id)?.Select(x => new
-            {
-                LogicalName = x.FirstOrDefault().LogicalName,
-                Id = x.Key,
-                TotalCapacity = x.FirstOrDefault().GetAttributeValue<int>("som_capacity"),
-                CapacityAvailable = x.FirstOrDefault().GetAttributeValue<int>("som_capacity") - x.Count(),
-                CaseCount = x.Count()
-            });
+                var caseWorkers = caseWorkerCases?.GroupBy(x => x.Id)?.Select(x => new
+                {
+                    EntityObject = x.FirstOrDefault(),
+                    CapacityAvailable = x.FirstOrDefault().GetAttributeValue<int>("som_capacity") - x.Count(),
+                });
 
-            var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.FirstOrDefault();
+                var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.Select(x => x.EntityObject)?.FirstOrDefault();
 
-            var caseUpdate = new Entity(caseRecord.LogicalName, caseRecord.Id)
-            {
-                ["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id)
-            };
+                var caseUpdate = new Entity(caseRecord.LogicalName, caseRecord.Id)
+                {
+                    ["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id)
+                };
 
-            try
-            {
                 service.Update(caseUpdate);
-                caseWorker.CapacityAvailable--;
             }
             catch (Exception ex)
             {
-                //TODO: Error Handling
+                // Create Log Entry
             }
         }
     }

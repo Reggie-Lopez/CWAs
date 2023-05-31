@@ -11,50 +11,66 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
     public class ConvertEmailToTransaction : IPlugin
     {
         ITracingService _trace;
+        const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
         public void Execute(IServiceProvider serviceProvider)
         {
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
-            //confirm inputparameters exist
-            if (context.InputParameters == null) { throw new InvalidPluginExecutionException("Input Parameters are not being passed into this plugin."); }
-            if (context.InputParameters["AttachmentIdList"] == null) { throw new InvalidPluginExecutionException("The AttachmentIdList Input Parameter is missing for this plugin."); }
-            if (context.InputParameters["Target"] == null) { throw new InvalidPluginExecutionException("The Target Input Parameter is missing for this plugin."); }
-
-            //email Target Parameter
-            var emailId = (EntityReference)context.InputParameters["Target"];
-
-            //attachment InputParameter
-            var attachmentIdList = new List<Guid>();
-            var attachmentIds = context.InputParameters["AttachmentIdList"].ToString();            
-            var attIdsSplit = attachmentIds.Split(',');
-
-            foreach (var attId in attIdsSplit) { attachmentIdList.Add(Guid.Parse(attId)); }
-
-            var transactionId = (string)context.InputParameters["ExistingTransactionId"];
-
-            //check if ExistingTransactionId is provided
-            if (transactionId == null)
+            try
             {
-                //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
-                transactionId = CreateTransactionRecord(service, emailId); 
+                //confirm inputparameters exist
+                if (context.InputParameters == null) { throw new InvalidPluginExecutionException("Input Parameters are not being passed into this plugin."); }
+                if (context.InputParameters["AttachmentIdList"] == null) { throw new InvalidPluginExecutionException("The AttachmentIdList Input Parameter is missing for this plugin."); }
+                if (context.InputParameters["Target"] == null) { throw new InvalidPluginExecutionException("The Target Input Parameter is missing for this plugin."); }
+
+                //email Target Parameter
+                var emailId = (EntityReference)context.InputParameters["Target"];
+
+                //attachment InputParameter
+                var attachmentIdList = new List<Guid>();
+                var attachmentIds = context.InputParameters["AttachmentIdList"].ToString();
+                var attIdsSplit = attachmentIds.Split(',');
+
+                foreach (var attId in attIdsSplit) { attachmentIdList.Add(Guid.Parse(attId)); }
+
+                var transactionId = (string)context.InputParameters["ExistingTransactionId"];
+
+                //check if ExistingTransactionId is provided
+                if (transactionId == null)
+                {
+                    //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
+                    transactionId = CreateTransactionRecord(service, emailId);
+                }
+                else
+                {
+                    //update existing transaction to populate the email lookup
+                    //doing it like this so it's only one audit rec created instead of a create and THEN an update
+                    var transRec = new Entity("som_transaction");
+                    transRec["som_transactionid"] = Guid.Parse(transactionId);
+                    transRec["som_email"] = emailId;
+                    service.Update(transRec);
+                }
+
+                //loop through each attachmentid in list and create a note, attach file
+                CreateNotesWithAttachment(service, Guid.Parse(transactionId), attachmentIdList);
+
+                //pass the transactionid as the output parameter back to the JS that called the action
+                context.OutputParameters["RedirectTransactionId"] = transactionId;
             }
-            else
-            {                
-                //update existing transaction to populate the email lookup
-                //doing it like this so it's only one audit rec created instead of a create and THEN an update
-                var transRec = new Entity("som_transaction");
-                transRec["som_transactionid"] = Guid.Parse(transactionId);
-                transRec["som_email"] = emailId;
-                service.Update(transRec);
-            }         
-
-            //loop through each attachmentid in list and create a note, attach file
-            CreateNotesWithAttachment(service, Guid.Parse(transactionId), attachmentIdList);
-
-            //pass the transactionid as the output parameter back to the JS that called the action
-            context.OutputParameters["RedirectTransactionId"] = transactionId;
+            catch (Exception ex)
+            {
+                service.Create(new Entity("som_logentry")
+                {
+                    ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                    ["som_name"] = ex.Message,
+                    ["som_details"] = ex.StackTrace,
+                    ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                    ["som_recordlogicalname"] = $"{context?.PrimaryEntityName}",
+                    ["som_recordid"] = $"{context?.PrimaryEntityId}",
+                });
+            }
         }
 
 
@@ -82,8 +98,17 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 }
                 catch (Exception ex)
                 {
+                    service.Create(new Entity("som_logentry")
+                    {
+                        ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                        ["som_name"] = ex.Message,
+                        ["som_details"] = ex.StackTrace,
+                        ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                        ["som_recordlogicalname"] = $"activitymimeattachment",
+                        ["som_recordid"] = $"{id}",
+                    });
+
                     _trace.Trace("Error creating note/attachment on Transaction (" + transactionId.ToString() + "): " + ex.Message);
-                    throw ex;
                 }
             }   
         }

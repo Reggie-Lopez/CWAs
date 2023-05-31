@@ -17,22 +17,24 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
-            var target = (Entity)context.InputParameters?["Target"];
-            if (target == null) return;
-
-            var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_casetype"));
-
-            var caseType = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-            if (caseType == null) return;
-
-            var query = new QueryExpression("som_question")
+            try
             {
-                ColumnSet = new ColumnSet("som_name", "som_maxratingvalue"),
-                LinkEntities =
+                var target = (Entity)context.InputParameters?["Target"];
+                if (target == null) return;
+
+                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_casetype"));
+
+                var caseType = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
+                if (caseType == null) return;
+
+                var query = new QueryExpression("som_question")
+                {
+                    ColumnSet = new ColumnSet("som_name", "som_maxratingvalue"),
+                    LinkEntities =
                 {
                     new LinkEntity("som_question", "som_objective", "som_objective", "som_objectiveid", JoinOperator.Inner)
                     {
-                        Columns = new ColumnSet("som_name"),
+                        Columns = new ColumnSet(false),
                         LinkCriteria = new FilterExpression(LogicalOperator.And)
                         {
                             Conditions =
@@ -42,28 +44,33 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                         }
                     }
                 }
-            };
-
-            var questions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
-
-            foreach (var question in questions)
-            {
-                var auditQuestion = new Entity("som_auditquestion")
-                {
-                    ["som_case"] = caseRecord.Id,
-                    ["som_name"] = question.GetAttributeValue<string>("som_objective1.som_name"),
-                    ["som_question"] = question.GetAttributeValue<string>("som_name"),
-                    ["som_pointsmaximum"] = question.GetAttributeValue<string>("som_maxratingvalue")
                 };
 
-                try
+                var questions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
+
+                foreach (var question in questions)
                 {
-                    service.Create(auditQuestion);
+                    try
+                    {
+                        var auditQuestion = new Entity("som_auditquestion")
+                        {
+                            ["som_question"] = question.ToEntityReference(),
+                            ["som_case"] = caseRecord.Id,
+                            ["som_name"] = question.GetAttributeValue<string>("som_objective1.som_name"),
+                            ["som_pointsmaximum"] = question.GetAttributeValue<string>("som_maxratingvalue")
+                        };
+
+                        service.Create(auditQuestion);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Create Log Entry
+                    }
                 }
-                catch (Exception ex)
-                {
-                    //TODO: Error Handling
-                }
+            }
+            catch (Exception ex)
+            {
+                // Create Log Entry
             }
         }
     }    
