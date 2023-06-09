@@ -23,7 +23,10 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                 var target = (Entity)context.InputParameters?["Target"];
                 if (target == null) return;
 
-                var transaction = service.Retrieve(target.LogicalName, target.Id, new ColumnSet(false));
+                var transaction = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_auditor", "som_documenttype"));
+
+                var auditor = transaction.GetAttributeValue<EntityReference>("som_auditor");
+                if (auditor == null) return;
 
                 var documentType = transaction.GetAttributeValue<EntityReference>("som_documenttype");
                 if (documentType == null) return;

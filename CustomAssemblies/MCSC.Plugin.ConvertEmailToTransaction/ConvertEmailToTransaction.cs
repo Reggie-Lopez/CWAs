@@ -45,11 +45,25 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 }
                 else
                 {
+                    //sync contact and case on email
+                    var email = service.Retrieve(emailId.LogicalName, emailId.Id, new ColumnSet("som_case"));
+
+                    var caseId = email.GetAttributeValue<EntityReference>("som_case");
+
+                    var contactId = new EntityReference();
+                    if (caseId != null)
+                    {
+                        contactId = service.Retrieve(caseId.LogicalName, caseId.Id, new ColumnSet("primarycontactid"))
+                            ?.GetAttributeValue<EntityReference>("primarycontactid");
+                    }
+
                     //update existing transaction to populate the email lookup
                     //doing it like this so it's only one audit rec created instead of a create and THEN an update
                     var transRec = new Entity("som_transaction");
                     transRec["som_transactionid"] = Guid.Parse(transactionId);
                     transRec["som_email"] = emailId;
+                    transRec["som_case"] = caseId;
+                    transRec["som_contact"] = contactId;
                     service.Update(transRec);
                 }
 
@@ -118,10 +132,24 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
         {
             try
             {
+                //sync contact and case on email
+                var email = service.Retrieve(emailId.LogicalName, emailId.Id, new ColumnSet("som_case"));
+
+                var caseId = email.GetAttributeValue<EntityReference>("som_case");
+
+                var contactId = new EntityReference();
+                if (caseId != null)
+                {
+                    contactId = service.Retrieve(caseId.LogicalName, caseId.Id, new ColumnSet("primarycontactid"))
+                        ?.GetAttributeValue<EntityReference>("primarycontactid");
+                }
+
                 //create new essentially-blank Transaction record, return the id
                 var transRec = new Entity("som_transaction");
                 transRec["som_commentsdescription"] = "This record was generated from an Email.";
                 transRec["som_email"] = emailId;
+                transRec["som_case"] = caseId;
+                transRec["som_contact"] = contactId;
                 var transactionId = service.Create(transRec);
 
                 return transactionId.ToString();

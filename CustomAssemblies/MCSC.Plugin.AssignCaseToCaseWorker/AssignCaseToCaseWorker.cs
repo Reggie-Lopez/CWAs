@@ -11,6 +11,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
     public class AssignCaseToCaseWorker : IPlugin
     {
         ITracingService _trace;
+        const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
         public void Execute(IServiceProvider serviceProvider)
         {
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
@@ -41,7 +42,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
 
                 var caseTypeNames = new List<string>()
                 {
-                    "Leave of Absense",
+                    "Leave of Absence",
                     "Workers' Compensation"
                 };
 
@@ -51,31 +52,31 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 {
                     ColumnSet = new ColumnSet("som_capacity"),
                     LinkEntities =
-                {
-                    new LinkEntity("systemuser", "som_caseassignment", "systemuserid", "som_assigneeid", JoinOperator.Inner)
                     {
-                        Columns = new ColumnSet(false),
-                        LinkCriteria = new FilterExpression(LogicalOperator.And)
+                        new LinkEntity("systemuser", "som_caseassignment", "systemuserid", "som_assigneeid", JoinOperator.Inner)
                         {
-                            Conditions =
+                            Columns = new ColumnSet(false),
+                            LinkCriteria = new FilterExpression(LogicalOperator.And)
                             {
-                                new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
-                                new ConditionExpression("som_casetype", ConditionOperator.Equal, caseType.Id),
+                                Conditions =
+                                {
+                                    new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
+                                    new ConditionExpression("som_casetype", ConditionOperator.Equal, caseType.Id),
+                                }
                             }
-                        }
-                    },
-                    new LinkEntity("systemuser", "incident", "systemuserid", "ownerid", JoinOperator.LeftOuter)
-                    {
-                        Columns = new ColumnSet(false),
-                        LinkCriteria = new FilterExpression(LogicalOperator.And)
+                        },
+                        new LinkEntity("systemuser", "incident", "systemuserid", "ownerid", JoinOperator.LeftOuter)
                         {
-                            Conditions =
+                            Columns = new ColumnSet(false),
+                            LinkCriteria = new FilterExpression(LogicalOperator.And)
                             {
-                                new ConditionExpression("statecode", ConditionOperator.Equal, 0)
+                                Conditions =
+                                {
+                                    new ConditionExpression("statecode", ConditionOperator.Equal, 0)
+                                }
                             }
                         }
                     }
-                }
                 };
 
                 var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
@@ -97,7 +98,15 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
             }
             catch (Exception ex)
             {
-                // Create Log Entry
+                service.Create(new Entity("som_logentry")
+                {
+                    ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                    ["som_name"] = ex.Message,
+                    ["som_details"] = ex.StackTrace,
+                    ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                    ["som_recordlogicalname"] = $"{context?.PrimaryEntityName}",
+                    ["som_recordid"] = $"{context?.PrimaryEntityId}",
+                });
             }
         }
     }

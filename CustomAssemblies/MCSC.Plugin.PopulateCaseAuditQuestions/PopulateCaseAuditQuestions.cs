@@ -11,6 +11,7 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
     public class PopulateCaseAuditQuestions : IPlugin
     {
         ITracingService _trace;
+        const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
         public void Execute(IServiceProvider serviceProvider)
         {
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
@@ -22,7 +23,10 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                 var target = (Entity)context.InputParameters?["Target"];
                 if (target == null) return;
 
-                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_casetype"));
+                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_casetype", "som_auditor"));
+
+                var auditor = caseRecord.GetAttributeValue<EntityReference>("som_auditor");
+                if (auditor == null) return;
 
                 var caseType = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
                 if (caseType == null) return;
@@ -31,19 +35,19 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                 {
                     ColumnSet = new ColumnSet("som_name", "som_maxratingvalue"),
                     LinkEntities =
-                {
-                    new LinkEntity("som_question", "som_objective", "som_objective", "som_objectiveid", JoinOperator.Inner)
                     {
-                        Columns = new ColumnSet(false),
-                        LinkCriteria = new FilterExpression(LogicalOperator.And)
+                        new LinkEntity("som_question", "som_objective", "som_objective", "som_objectiveid", JoinOperator.Inner)
                         {
-                            Conditions =
+                            Columns = new ColumnSet(false),
+                            LinkCriteria = new FilterExpression(LogicalOperator.And)
                             {
-                                new ConditionExpression("som_casetype", ConditionOperator.Equal, caseType.Id)
+                                Conditions =
+                                {
+                                    new ConditionExpression("som_casetype", ConditionOperator.Equal, caseType.Id)
+                                }
                             }
                         }
                     }
-                }
                 };
 
                 var questions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
@@ -64,13 +68,29 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                     }
                     catch (Exception ex)
                     {
-                        // Create Log Entry
+                        service.Create(new Entity("som_logentry")
+                        {
+                            ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                            ["som_name"] = ex.Message,
+                            ["som_details"] = ex.StackTrace,
+                            ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                            ["som_recordlogicalname"] = $"{question.LogicalName}",
+                            ["som_recordid"] = $"{question.Id}",
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Create Log Entry
+                service.Create(new Entity("som_logentry")
+                {
+                    ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                    ["som_name"] = ex.Message,
+                    ["som_details"] = ex.StackTrace,
+                    ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                    ["som_recordlogicalname"] = $"{context?.PrimaryEntityName}",
+                    ["som_recordid"] = $"{context?.PrimaryEntityId}",
+                });
             }
         }
     }    
