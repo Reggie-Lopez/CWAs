@@ -26,8 +26,7 @@ namespace MCSC.CWA.CheckUserHasRoles
         protected override void Execute(CodeActivityContext executionContext)
         {
             var context = executionContext.GetExtension<IWorkflowContext>();
-            var service = executionContext.GetExtension<IOrganizationServiceFactory>()
-                .CreateOrganizationService(context.UserId);
+            var service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
 
             try
             {
@@ -35,11 +34,7 @@ namespace MCSC.CWA.CheckUserHasRoles
                 var roleNames = RoleNames.Get(executionContext) ?? "";
                 var requireAll = RequireAll.Get(executionContext);
 
-                if (string.IsNullOrEmpty(roleNames))
-                {
-                    UserHasRoles.Set(executionContext, true);
-                    return;
-                }
+                if (string.IsNullOrEmpty(roleNames)) throw new InvalidPluginExecutionException("No Role specified as an argument for the workflow step.");
 
                 var names = roleNames.Split(',');
 
