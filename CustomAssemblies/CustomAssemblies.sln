@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.AddCaseworkerTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetContactFromEmail", "MCSC.CWA.GetContactFromEmail\MCSC.CWA.GetContactFromEmail.csproj", "{F46F5494-C4C2-4C1B-9A6C-F9E7121F0134}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.UpdateNPADeductionLines", "MCSC.Plugin.UpdateNPADeductionLines\MCSC.Plugin.UpdateNPADeductionLines.csproj", "{4D0153B3-5D51-4EFE-9827-D872C636AA98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +158,16 @@ Global
 		{F46F5494-C4C2-4C1B-9A6C-F9E7121F0134}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F46F5494-C4C2-4C1B-9A6C-F9E7121F0134}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
 		{F46F5494-C4C2-4C1B-9A6C-F9E7121F0134}.UAT|Any CPU.Build.0 = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0153B3-5D51-4EFE-9827-D872C636AA98}.UAT|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
