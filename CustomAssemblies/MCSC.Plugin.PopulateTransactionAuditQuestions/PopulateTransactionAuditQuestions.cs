@@ -20,16 +20,49 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
 
             try
             {
-                var target = (Entity)context.InputParameters?["Target"];
-                if (target == null) return;
+                Entity target = new Entity();
+                Entity targetPre = new Entity();
 
-                var transaction = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_auditor", "som_documenttype"));
+                if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity)
+                {
+                    target = (Entity)context.PostEntityImages["PostImage"];
+                    targetPre = (Entity)context.PreEntityImages["PreImage"];
+                    if (target == null) return;
+                }
 
-                var auditor = transaction.GetAttributeValue<EntityReference>("som_auditor");
+                var auditor = target.GetAttributeValue<EntityReference>("som_auditor");
+                var documentType = target.GetAttributeValue<EntityReference>("som_documenttype");
+                var auditorPre = targetPre.GetAttributeValue<EntityReference>("som_auditor");
+                var documentTypePre = targetPre.GetAttributeValue<EntityReference>("som_documenttype");
+
+                //document type/auditor. document type is a required field
+
+                //if document type changes, always remove all audit questions
+                if (documentTypePre != documentType)
+                {                    
+                    RemoveAllExistingAuditQuestions(service, target.Id);                   
+                }
+                else
+                {
+                    //if document type does not change but the auditor DOES, then just return since the audit questions should stay the same. if auditor
+                    if (auditorPre != auditor)
+                    {
+                        if (auditor == null)
+                        {
+                            RemoveAllExistingAuditQuestions(service, target.Id);
+                            return;
+                        }
+                        if (auditorPre != null && auditor != null) //if it changes from bob to bill (and the doc type doesnt change) then just return
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                //if auditor is blank, return. code above will remove all audit questions, assuming document type changes
                 if (auditor == null) return;
 
-                var documentType = transaction.GetAttributeValue<EntityReference>("som_documenttype");
-                if (documentType == null) return;
+
 
                 var query = new QueryExpression("som_question")
                 {
@@ -57,7 +90,7 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                     var auditQuestion = new Entity("som_auditquestion")
                     {
                         ["som_question"] = question.ToEntityReference(),
-                        ["som_transaction"] = transaction.Id,
+                        ["som_transaction"] = target.Id,
                         ["som_name"] = question.GetAttributeValue<string>("som_objective1.som_name"),
                         ["som_errortype"] = question.GetAttributeValue<string>("som_errortype"),
                     };
@@ -93,5 +126,29 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                 });
             }
         }
+
+        private void RemoveAllExistingAuditQuestions(IOrganizationService service, Guid id)
+        {
+            ConditionExpression cond = new ConditionExpression();
+            cond.AttributeName = "som_transaction";
+            cond.Operator = ConditionOperator.Equal;
+            cond.Values.Add(id);
+
+            FilterExpression filter = new FilterExpression();
+            filter.Conditions.Add(cond);
+
+            QueryExpression query = new QueryExpression("som_auditquestion");
+            query.ColumnSet.AddColumns("som_auditquestionid");
+            query.Criteria.AddFilter(filter);
+
+            var auditquestions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
+
+            foreach (var auditq in auditquestions)
+            {
+                service.Delete("som_auditquestion", auditq.Id);
+            }
+            return;
+        }
+
     }    
 }

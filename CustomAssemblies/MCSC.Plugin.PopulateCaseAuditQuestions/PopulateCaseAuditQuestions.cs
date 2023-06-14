@@ -20,16 +20,48 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
 
             try
             {
-                var target = (Entity)context.InputParameters?["Target"];
-                if (target == null) return;
+                Entity target = new Entity();
+                Entity targetPre = new Entity();
 
-                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("som_casetype", "som_auditor"));
+                if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity)
+                {
+                    target = (Entity)context.PostEntityImages["PostImage"];
+                    targetPre = (Entity)context.PreEntityImages["PreImage"];
+                    if (target == null) return;
+                }
 
-                var auditor = caseRecord.GetAttributeValue<EntityReference>("som_auditor");
+                var auditor = target.GetAttributeValue<EntityReference>("som_auditor");
+                var caseType = target.GetAttributeValue<EntityReference>("som_casetype");
+                var auditorPre = targetPre.GetAttributeValue<EntityReference>("som_auditor");
+                var caseTypePre = targetPre.GetAttributeValue<EntityReference>("som_casetype");
+
+                //case type/auditor
+                //case type/auditor
+
+                //if case type changes, always remove all audit questions
+                if (caseTypePre != caseType)
+                {
+                    RemoveAllExistingAuditQuestions(service, target.Id);
+                }
+                else
+                {
+                    //if case type does not change but the auditor DOES, then just return since the audit questions should stay the same. if auditor
+                    if (auditorPre != auditor)
+                    {
+                        if (auditor == null)
+                        {
+                            RemoveAllExistingAuditQuestions(service, target.Id);
+                            return;
+                        }
+                        if (auditorPre != null && auditor != null) //if it changes from bob to bill (and the doc type doesnt change) then just return
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                //if auditor is blank, return. code above will remove all audit questions, assuming case type changes
                 if (auditor == null) return;
-
-                var caseType = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-                if (caseType == null) return;
 
                 var query = new QueryExpression("som_question")
                 {
@@ -59,7 +91,7 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                         var auditQuestion = new Entity("som_auditquestion")
                         {
                             ["som_question"] = question.ToEntityReference(),
-                            ["som_case"] = caseRecord.Id,
+                            ["som_case"] = target.Id,
                             ["som_name"] = question.GetAttributeValue<string>("som_objective1.som_name"),
                             ["som_pointsmaximum"] = question.GetAttributeValue<string>("som_maxratingvalue")
                         };
@@ -92,6 +124,30 @@ namespace MCSC.Plugin.PopulateCaseAuditQuestions
                     ["som_recordid"] = $"{context?.PrimaryEntityId}",
                 });
             }
+        }
+
+
+        private void RemoveAllExistingAuditQuestions(IOrganizationService service, Guid id)
+        {
+            ConditionExpression cond = new ConditionExpression();
+            cond.AttributeName = "som_transaction";
+            cond.Operator = ConditionOperator.Equal;
+            cond.Values.Add(id);
+
+            FilterExpression filter = new FilterExpression();
+            filter.Conditions.Add(cond);
+
+            QueryExpression query = new QueryExpression("som_auditquestion");
+            query.ColumnSet.AddColumns("som_auditquestionid");
+            query.Criteria.AddFilter(filter);
+
+            var auditquestions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
+
+            foreach (var auditq in auditquestions)
+            {
+                service.Delete("som_auditquestion", auditq.Id);
+            }
+            return;
         }
     }    
 }
