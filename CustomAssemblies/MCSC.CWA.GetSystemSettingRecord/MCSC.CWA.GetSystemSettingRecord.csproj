@@ -7,7 +7,7 @@
     <ProjectGuid>{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MCSC.CWAGetSystemSettingRecord</RootNamespace>
+    <RootNamespace>MCSC.CWA.GetSystemSettingRecord</RootNamespace>
     <AssemblyName>MCSC.CWA.GetSystemSettingRecord</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -17,6 +17,7 @@ namespace MCSC.CWA.GetSystemSettingValue
         public InArgument<string> SystemSettingName { get; set; }
 
         [Output("System Setting Record")]
+        [ReferenceTarget("som_systemsetting")]
         public OutArgument<EntityReference> SystemSettingRecord { get; set; }
 
         const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
