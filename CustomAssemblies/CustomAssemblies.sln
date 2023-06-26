@@ -29,9 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetContactFromEmai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.UpdateNPADeductionLines", "MCSC.Plugin.UpdateNPADeductionLines\MCSC.Plugin.UpdateNPADeductionLines.csproj", "{4D0153B3-5D51-4EFE-9827-D872C636AA98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingValue", "MCSC.Plugin.SetWordTemplateHeaderField\MCSC.CWA.GetSystemSettingValue.csproj", "{EA3EC9A9-8FFA-4F8D-BDA7-91BE82D72512}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingValue", "MCSC.CWA.GetSystemSettingValue\MCSC.CWA.GetSystemSettingValue.csproj", "{EA3EC9A9-8FFA-4F8D-BDA7-91BE82D72512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingRecord", "MCSC.Plugin.GetSystemSettingRecordForLookup\MCSC.CWA.GetSystemSettingRecord.csproj", "{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingRecord", "MCSC.CWA.GetSystemSettingRecord\MCSC.CWA.GetSystemSettingRecord.csproj", "{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
