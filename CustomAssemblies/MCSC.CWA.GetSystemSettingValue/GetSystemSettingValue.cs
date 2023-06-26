@@ -69,7 +69,7 @@ namespace MCSC.CWA.GetSystemSettingValue
                                         <entity name='som_systemsetting'>
                                             <attribute name='som_systemsettingid' />
                                             <attribute name='{1}' />
-                                            <filter><condition attribute='som_name' operator='eq' value='{0)' /></filter>                                               
+                                            <filter><condition attribute='som_name' operator='eq' value='{0}' /></filter>                                               
                                         </entity>
                                     </fetch>";
 

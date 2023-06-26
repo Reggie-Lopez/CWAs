@@ -8,9 +8,9 @@ using Microsoft.Xrm.Sdk;
 using System.Activities;
 using Microsoft.Xrm.Sdk.Query;
 
-namespace MCSC.CWA.GetSystemSettingValue
+namespace MCSC.CWA.GetSystemSettingRecord
 {
-    public class GetSystemSettingValue : CodeActivity
+    public class GetSystemSettingRecord : CodeActivity
     {
         [Input("System Setting Name")]
         [RequiredArgument]
@@ -34,10 +34,10 @@ namespace MCSC.CWA.GetSystemSettingValue
 
                 if (string.IsNullOrEmpty(sysSettingName)) throw new InvalidPluginExecutionException("All of the Input Parameters have not been set on the workflow step.");
 
-                //using the 'sysSettingName', get the value of the system setting record
-                var sysSettingRec = FindSystemSettingRecord(service, "Word Template Header");
+                //using the 'sysSettingName', get the system setting record
+                var sysSettingRec = FindSystemSettingRecord(service, sysSettingName);
 
-                //return either the value1 or value2 of the systems etting record
+                //return system setting record
                 SystemSettingRecord.Set(executionContext, sysSettingRec);
                 return;
 
@@ -63,7 +63,7 @@ namespace MCSC.CWA.GetSystemSettingValue
             var fetchQueryForVal = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' no-lock='true' distinct='false'>
                                         <entity name='som_systemsetting'>
                                             <attribute name='som_systemsettingid' />
-                                            <filter><condition attribute='som_name' operator='eq' value='{0)' /></filter>                                               
+                                            <filter><condition attribute='som_name' operator='eq' value='{0}' /></filter>                                               
                                         </entity>
                                     </fetch>";
 
