@@ -37,7 +37,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 if (excludeProcessLevels.Contains(processLevel)) return;
 
                 var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-                var caseType = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_name"));
+                var caseType = service.Retrieve("som_casetype", caseTypeRef.Id, new ColumnSet("som_name"));
                 var caseTypeName = caseType.GetAttributeValue<string>("som_name");
 
                 var caseTypeNames = new List<string>()
@@ -46,7 +46,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                     "Workers' Compensation"
                 };
 
-                if (!caseTypeName.Contains(caseTypeName)) return;
+                if (!caseTypeNames.Contains(caseTypeName)) return;
 
                 var caseWorkerCaseQuery = new QueryExpression("systemuser")
                 {
