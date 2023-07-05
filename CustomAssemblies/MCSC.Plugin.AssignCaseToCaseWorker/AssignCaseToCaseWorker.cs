@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -26,7 +27,14 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype"));
 
                 var contactRef = caseRecord.GetAttributeValue<EntityReference>("primarycontactid");
+                var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
+
+                if (caseTypeRef == null) return; //return if the case type is empty
+                if (contactRef == null) return; //return if the contact is empty
+
                 var contact = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_processlevel"));
+                var caseType = service.Retrieve("som_casetype", caseTypeRef.Id, new ColumnSet("som_name"));
+                var caseTypeName = caseType.GetAttributeValue<string>("som_name");
                 var processLevel = contact.GetAttributeValue<string>("som_processlevel");
 
                 var excludeProcessLevels = new List<string>()
@@ -35,15 +43,11 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 };
 
                 if (excludeProcessLevels.Contains(processLevel)) return;
-
-                var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-                var caseType = service.Retrieve("som_casetype", caseTypeRef.Id, new ColumnSet("som_name"));
-                var caseTypeName = caseType.GetAttributeValue<string>("som_name");
-
+                               
                 var caseTypeNames = new List<string>()
                 {
-                    "Leave of Absence",
-                    "Workers' Compensation"
+                    "LoA",
+                    "Workers' Compe"
                 };
 
                 if (!caseTypeNames.Contains(caseTypeName)) return;
@@ -61,7 +65,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                                 Conditions =
                                 {
                                     new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
-                                    new ConditionExpression("som_casetype", ConditionOperator.Equal, caseType.Id),
+                                    new ConditionExpression("som_casetype", ConditionOperator.Equal, caseTypeRef.Id),
                                 }
                             }
                         },
@@ -77,8 +81,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                             }
                         }
                     }
-                };
-
+                }; 
                 var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
 
                 var caseWorkers = caseWorkerCases?.GroupBy(x => x.Id)?.Select(x => new
@@ -89,12 +92,10 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
 
                 var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.Select(x => x.EntityObject)?.FirstOrDefault();
 
-                var caseUpdate = new Entity(caseRecord.LogicalName, caseRecord.Id)
-                {
-                    ["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id)
-                };
+                var caseUpdate = new Entity(target.LogicalName, target.Id);
+                caseUpdate["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id);
+                service.Update(caseUpdate);               
 
-                service.Update(caseUpdate);
             }
             catch (Exception ex)
             {
