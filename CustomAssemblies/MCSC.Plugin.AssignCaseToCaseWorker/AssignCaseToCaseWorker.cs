@@ -47,7 +47,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 var caseTypeNames = new List<string>()
                 {
                     "LoA",
-                    "Workers' Compe"
+                    "Workers' Comp"
                 };
 
                 if (!caseTypeNames.Contains(caseTypeName)) return;
