@@ -33,15 +33,21 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
                 var templateRecordId = (string)context.InputParameters["RecordId"];
                 var templateRecordType = (string)context.InputParameters["RecordType"];
                 var templateRecordER = new EntityReference(templateRecordType, Guid.Parse(templateRecordId));
-                           
-                //render word template
-                var renderedWordTemplate = GeneratePDFFromWordTemplate(service, wordTemplateId, templateRecordER.LogicalName, templateRecordER.Id);
+
+                //get if they want a word doc or PDF
+                var wordOrPdf = (string)context.InputParameters["WordOrPdf"];
 
                 //create new transaction record, associate to case
                 var transactionId = CreateNewTransactionRecord(service, caseEr);
-                //create a note with the rendered word template (pdf)
-                CreateNoteForTransaction(service, transactionId, renderedWordTemplate, wordTemplateName);
 
+                //render word template
+                var renderedWordTemplate = GenerateWordOrPDFFromWordTemplate(service, wordTemplateId, templateRecordER.LogicalName, templateRecordER.Id, transactionId, wordOrPdf.ToLower());
+
+                if (renderedWordTemplate != null)
+                {
+                    //create a note with the rendered word template (pdf)
+                    CreateNoteForTransaction(service, transactionId, renderedWordTemplate, wordTemplateName);
+                }
             }
             catch (Exception ex)
             {
@@ -67,7 +73,8 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             note.Attributes["documentbody"] = Convert.ToBase64String(renderedWordTemplate);
             note.Attributes["mimetype"] = @"application/pdf";
             note.Attributes["filename"] = wordTemplateName;
-            var noteId = service.Create(note);
+            service.Create(note);
+
         }
 
         private Guid CreateNewTransactionRecord(IOrganizationService service, EntityReference caseEr)
@@ -86,7 +93,6 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
         }
 
 
-
         private Guid GetWordTemplateID(IOrganizationService service, string wordTemplateName)
         {
             QueryExpression query = new QueryExpression("documenttemplate");
@@ -103,18 +109,34 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             return templates.Entities[0].Id;
         }
 
-        public byte[] GeneratePDFFromWordTemplate(IOrganizationService service, Guid? wordTemplateId, string entityName, Guid entityId)
+        public byte[] GenerateWordOrPDFFromWordTemplate(IOrganizationService service, Guid? wordTemplateId, string entityName, Guid entityId, Guid transactionId, string wordOrPdf)
         {
-            //get the Entity Type code from entity name
-            var entityTypeCode = GetObectTypeCodeOfEntity(service, entityName);            
+            //rendering as word creates a note on the 'target' entity. that message does not give u the ability ot specify note text or a title
+            if (wordOrPdf == "word")
+            {
+                OrganizationRequest req = new OrganizationRequest("SetWordTemplate");
+                req["Target"] = new EntityReference("som_transaction", transactionId);
+                req["SelectedTemplate"] = new EntityReference("documenttemplate", (Guid)wordTemplateId);
+                service.Execute(req);
+            }
 
-            OrganizationRequest exportPdfAction = new OrganizationRequest("ExportPdfDocument");
-            exportPdfAction["EntityTypeCode"] = entityTypeCode;
-            exportPdfAction["SelectedTemplate"] = new EntityReference("documenttemplate", (Guid)wordTemplateId);
-            exportPdfAction["SelectedRecords"] = "[\'{" + entityId + "}\']";
 
-            OrganizationResponse convertPdfResponse = service.Execute(exportPdfAction);
-            return convertPdfResponse["PdfFile"] as byte[];
+            if (wordOrPdf == "pdf")
+            {
+                //get the Entity Type code from entity name
+                var entityTypeCode = GetObectTypeCodeOfEntity(service, entityName);
+
+                //generate word template as pdf, it returns bytes. use that to attach to a note on the transaction
+                OrganizationRequest exportPdfAction = new OrganizationRequest("ExportPdfDocument");
+                exportPdfAction["EntityTypeCode"] = entityTypeCode;
+                exportPdfAction["SelectedTemplate"] = new EntityReference("documenttemplate", (Guid)wordTemplateId);
+                exportPdfAction["SelectedRecords"] = "[\'{" + entityId + "}\']";
+                OrganizationResponse convertPdfResponse = service.Execute(exportPdfAction);
+
+                return convertPdfResponse["PdfFile"] as byte[];
+            }
+
+            return null;
         }
 
 
