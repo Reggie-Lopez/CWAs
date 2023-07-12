@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32901.82
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBed", "TestBed\TestBed.csproj", "{909CA78B-677A-4DAF-9AD4-F6F0DCACA42B}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingValue", "MCSC.CWA.GetSystemSettingValue\MCSC.CWA.GetSystemSettingValue.csproj", "{EA3EC9A9-8FFA-4F8D-BDA7-91BE82D72512}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingRecord", "MCSC.CWA.GetSystemSettingRecord\MCSC.CWA.GetSystemSettingRecord.csproj", "{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCSC.CWA.GetUserReferenceByName", "MCSC.CWA.GetUserReferenceByName\MCSC.CWA.GetUserReferenceByName.csproj", "{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -192,6 +194,16 @@ Global
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.UAT|Any CPU.Build.0 = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{491EE15F-30F7-4CDF-A2B8-56C813FD58CE}.UAT|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
