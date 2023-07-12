@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingVa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.CWA.GetSystemSettingRecord", "MCSC.CWA.GetSystemSettingRecord\MCSC.CWA.GetSystemSettingRecord.csproj", "{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSC.Plugin.RenderWordTemplateForTransaction", "MCSC.Plugin.RenderWordTemplateForTransaction\MCSC.Plugin.RenderWordTemplateForTransaction.csproj", "{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -192,6 +194,16 @@ Global
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A4529E3-3A2E-4B45-AF9C-966805AF57F0}.UAT|Any CPU.Build.0 = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFBE775-AD50-4E55-BF60-D37EDBD60C5E}.UAT|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
