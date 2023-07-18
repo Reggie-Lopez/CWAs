@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <AssemblyOriginatorKeyFile>MCSC.CWA.GetUserReferenceByName.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.49" />
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.49" />
+    <PackageReference Include="XrmToolkit.Linq" Version="9.1.1" />
+    <PackageReference Include="XrmToolkit.ProxyGeneration.Extensions" Version="9.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Activities" />
+  </ItemGroup>
+</Project>

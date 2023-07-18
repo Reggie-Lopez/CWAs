@@ -1,0 +1,108 @@
+{
+  "SolutionType": 1,
+  "Organizations": [
+    {
+      "ConnectionProtocol": 3072,
+      "OrganizationDisplayName": "MCSC-CRM-Dev",
+      "OrganizationName": "unqa9dd937c67114b3c9e2a06b687ff9",
+      "OrganizationUrl": "https://orgab6ce626.crm9.dynamics.com",
+      "UserFriendlyName": "MCSC-DEV",
+      "CurrentSolution": {
+        "Id": "6596f226-eb1f-ee11-8f6c-001dd8068ae9",
+        "Name": "MCSC_Sprint 5",
+        "UniqueName": "MCSC_Sprint5"
+      },
+      "Projects": [
+        {
+          "Name": "MCSC.CWA.GetUserReferenceByName.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Files": [
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 30,
+              "PluginClassType": 2,
+              "RelativeFilePath": "\\BaseWorkflow.cs"
+            },
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 26,
+              "IsWorkflow": true,
+              "RelativeFilePath": "\\GetUserReferenceByName.cs"
+            },
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 46,
+              "RelativeFilePath": "\\MessageNames.cs"
+            },
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 45,
+              "RelativeFilePath": "\\TableNames.cs"
+            }
+          ],
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "1ba7a1a6-375a-465a-b966-282a7096851c",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.CWA.GetUserReferenceByName.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "Settings": [
+        {
+          "CssMinification": 1,
+          "JavaScriptMinification": 1,
+          "SettingType": 6
+        },
+        {
+          "AddDebuggerNonUserCodeAttribute": true,
+          "AddExcludeFromCodeCoverageAttribute": true,
+          "AddStringLengthAttribute": false,
+          "BaseProxyClassFileName": "BaseProxyClass",
+          "CustomProxyNamingServiceDllPath": "",
+          "EnumsFileName": "OptionSetEnums",
+          "GeneratedCodeAttributeVersionPrecision": 4,
+          "GenerateProxyEnumsInSeparateClasses": true,
+          "MakeAllPropertiesEditable": false,
+          "ProxyEntityClassPath": "\\ProxyClasses",
+          "ProxyEntityNamingConvention": 1,
+          "ProxyEntityNamingPattern": "{0}",
+          "ProxyEnumPath": "\\ProxyClasses\\Enums",
+          "ProxyGenerationMethod": 1,
+          "ProxyMessagesPath": "\\ProxyClasses\\Messages",
+          "ProxyNamingMethod": 0,
+          "ServiceContextName": "CrmServiceContext",
+          "SettingType": 4,
+          "UseStronglyTypedNameForProxyRelatedEntities": true
+        },
+        {
+          "ChartPath": "\\Charts",
+          "CssPath": "\\Web",
+          "CustomAssemblyConfigPath": "\\AssemblyConfig",
+          "EmailTemplatePath": "\\EmailTemplates",
+          "EntityMetadataPath": "\\EntityMetadata",
+          "HtmlPath": "\\Web",
+          "ImagePath": "\\Web",
+          "JavaScriptPath": "\\Web",
+          "PluginConfigurationsPath": "\\PluginConfigurations",
+          "ProcessPath": "\\Processes",
+          "ResourcePath": "\\Web",
+          "SettingType": 5,
+          "SilverlightPath": "\\Xap",
+          "SitemapPath": "\\Sitemap",
+          "TypeScriptIntellisensePath": "\\Web\\IntellisenseFiles",
+          "TypeScriptPath": "\\Web",
+          "ViewPath": "\\Views",
+          "XmlPath": "\\Web",
+          "XslPath": "\\Web"
+        }
+      ]
+    }
+  ]
+}
