@@ -137,7 +137,7 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             if (wordOrPdf == "pdf")
             {
                 //get the Entity Type code from entity name
-                var entityTypeCode = GetObectTypeCodeOfEntity(service, entityName);
+                var entityTypeCode = GetObjectTypeCodeOfEntity(service, entityName);
 
                 //generate word template as pdf, it returns bytes. use that to attach to a note on the transaction
                 OrganizationRequest exportPdfAction = new OrganizationRequest("ExportPdfDocument");
@@ -153,7 +153,7 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
         }
 
 
-        public int GetObectTypeCodeOfEntity(IOrganizationService service, string entityName)
+        public int GetObjectTypeCodeOfEntity(IOrganizationService service, string entityName)
         {
             RetrieveEntityRequest retrieveEntityRequest = new RetrieveEntityRequest
             {

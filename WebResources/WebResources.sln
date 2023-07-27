@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.32901.82
+VisualStudioVersion = 16.0.33130.400
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JavaScript", "JavaScript", "{E45C58D8-8B37-40E1-8E05-DCF38FB10558}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,7 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JavaScript", "JavaScript", 
 		JavaScript\ribbon_template.js = JavaScript\ribbon_template.js
 		JavaScript\som_case.js = JavaScript\som_case.js
 		JavaScript\som_case_ribbon.js = JavaScript\som_case_ribbon.js
+		JavaScript\som_contact.js = JavaScript\som_contact.js
 		JavaScript\som_email_ribbon.js = JavaScript\som_email_ribbon.js
+		JavaScript\som_leaveofabsence.js = JavaScript\som_leaveofabsence.js
+		JavaScript\som_npadeductionline.js = JavaScript\som_npadeductionline.js
+		JavaScript\som_npadeductionline_ribbon.js = JavaScript\som_npadeductionline_ribbon.js
 		JavaScript\som_transaction.js = JavaScript\som_transaction.js
 		JavaScript\som_workcategory.js = JavaScript\som_workcategory.js
 	EndProjectSection
