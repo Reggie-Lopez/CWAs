@@ -24,24 +24,37 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             {
                 //get word template from action param
                 var wordTemplateName = (string)context.InputParameters["WordTemplateName"];
-                var wordTemplateId = GetWordTemplateID(service, wordTemplateName);          
+                var wordTemplateId = GetWordTemplateID(service, wordTemplateName); 
+                
+                _trace.Trace($"Word Template ID: {wordTemplateId}");
 
-                //get case from action param
-                var caseEr = (EntityReference)context.InputParameters["Case"];
+                //get case from caseid provided in action param
+                var caseId = (string)context.InputParameters["CaseId"];
+                var caseEr = new EntityReference("incident", Guid.Parse(caseId));
+
+                _trace.Trace($"Case ID: {caseId}");
 
                 //get record info for word template
                 var templateRecordId = (string)context.InputParameters["RecordId"];
                 var templateRecordType = (string)context.InputParameters["RecordType"];
                 var templateRecordER = new EntityReference(templateRecordType, Guid.Parse(templateRecordId));
 
+                _trace.Trace($"Record ID: {templateRecordId}");
+
                 //get if they want a word doc or PDF
                 var wordOrPdf = (string)context.InputParameters["WordOrPdf"];
+
+                _trace.Trace($"Word or PDF: {wordOrPdf}");
 
                 //create new transaction record, associate to case
                 var transactionId = CreateNewTransactionRecord(service, caseEr);
 
+                _trace.Trace($"Transaction ID: {transactionId}");
+
                 //render word template
                 var renderedWordTemplate = GenerateWordOrPDFFromWordTemplate(service, wordTemplateId, templateRecordER.LogicalName, templateRecordER.Id, transactionId, wordOrPdf.ToLower());
+
+                _trace.Trace($"Rendered Word Template: {renderedWordTemplate}");
 
                 if (renderedWordTemplate != null)
                 {

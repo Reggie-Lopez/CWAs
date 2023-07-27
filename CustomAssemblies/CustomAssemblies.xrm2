@@ -14,6 +14,22 @@
       },
       "Projects": [
         {
+          "Name": "JavaScript.Assets.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Files": [
+            {
+              "CrmId": "dd8a6299-752b-ee11-9965-001dd83014b3",
+              "FileType": 3,
+              "RelativeFilePath": "\\Web\\som_Contact.js"
+            },
+            {
+              "CrmId": "85749021-812c-ee11-9965-001dd8301146",
+              "FileType": 3,
+              "RelativeFilePath": "\\Web\\workstreamFunctions.js"
+            }
+          ]
+        },
+        {
           "Name": "MCSC.CWA.GetUserReferenceByName.csproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Files": [
@@ -48,6 +64,36 @@
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
                 "PathNameOnServer": "MCSC.CWA.GetUserReferenceByName.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.AssignCaseToCaseWorker.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "e7cbc3ca-a202-489c-9e4e-1076e7fd145c",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.RenderWordTemplateForTransaction.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "43754ed0-5ff4-4202-b9b0-15f0bdeeea8a",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
                 "SourceType": 0
               }
             }
@@ -101,6 +147,10 @@
           "ViewPath": "\\Views",
           "XmlPath": "\\Web",
           "XslPath": "\\Web"
+        },
+        {
+          "PluginStepNameTemplate": "{messageDisplayName} - {primaryEntityDisplayName} - {pipelineStageDisplayName}",
+          "SettingType": 1
         }
       ]
     }
