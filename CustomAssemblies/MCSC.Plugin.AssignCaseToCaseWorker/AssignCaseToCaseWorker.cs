@@ -24,11 +24,10 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 var target = (Entity)context.InputParameters?["Target"];
                 if (target == null) return;
 
-                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype", "som_assigneeid"));
+                var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype"));
 
                 var contactRef = caseRecord.GetAttributeValue<EntityReference>("primarycontactid");
                 var caseTypeRef = caseRecord.GetAttributeValue<EntityReference>("som_casetype");
-                var assigneeRef = caseRecord.GetAttributeValue<EntityReference>("som_assigneeid");
 
                 if (caseTypeRef == null) return; //return if the case type is empty
                 if (contactRef == null) return; //return if the contact is empty
@@ -48,82 +47,55 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 var caseTypeNames = new List<string>()
                 {
                     "LoA",
-                    "Workers' Comp"
+                    "Workers' Comp",
+                    "Appeal"
                 };
 
                 if (!caseTypeNames.Contains(caseTypeName)) return;
 
-                // Check if assignee is a Team or User
-                if (assigneeRef.LogicalName == "team")
+                var caseWorkerCaseQuery = new QueryExpression("systemuser")
                 {
-                    var caseAssignmentQuery = new QueryExpression("som_caseassignment")
+                    ColumnSet = new ColumnSet("som_capacity"),
+                    LinkEntities =
                     {
-                        ColumnSet = new ColumnSet("som_assigneeid"),
-                        Criteria = new FilterExpression
+                        new LinkEntity("systemuser", "som_caseassignment", "systemuserid", "som_assigneeid", JoinOperator.Inner)
                         {
-                            Conditions =
+                            Columns = new ColumnSet(false),
+                            LinkCriteria = new FilterExpression(LogicalOperator.And)
                             {
-                                new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
-                                new ConditionExpression("som_casetype", ConditionOperator.Equal, caseTypeRef.Id)
+                                Conditions =
+                                {
+                                    new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
+                                    new ConditionExpression("som_casetype", ConditionOperator.Equal, caseTypeRef.Id),
+                                }
+                            }
+                        },
+                        new LinkEntity("systemuser", "incident", "systemuserid", "ownerid", JoinOperator.LeftOuter)
+                        {
+                            Columns = new ColumnSet(false),
+                            LinkCriteria = new FilterExpression(LogicalOperator.And)
+                            {
+                                Conditions =
+                                {
+                                    new ConditionExpression("statecode", ConditionOperator.Equal, 0)
+                                }
                             }
                         }
-                    };
-
-                    var caseAssignment = service.RetrieveMultiple(caseAssignmentQuery)?.Entities?.FirstOrDefault();
-
-                    if (caseAssignment != null)
-                    {
-                        var caseUpdate = new Entity(target.LogicalName, target.Id);
-                        caseUpdate["ownerid"] = assigneeRef;  // Assign case to the Team
-                        service.Update(caseUpdate);
                     }
-                }
-                else if (assigneeRef.LogicalName == "systemuser")  // Existing logic for User assignment
+                };
+                var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
+
+                var caseWorkers = caseWorkerCases?.GroupBy(x => x.Id)?.Select(x => new
                 {
-                    var caseWorkerCaseQuery = new QueryExpression("systemuser")
-                    {
-                        ColumnSet = new ColumnSet("som_capacity"),
-                        LinkEntities =
-                        {
-                            new LinkEntity("systemuser", "som_caseassignment", "systemuserid", "som_assigneeid", JoinOperator.Inner)
-                            {
-                                Columns = new ColumnSet(false),
-                                LinkCriteria = new FilterExpression(LogicalOperator.And)
-                                {
-                                    Conditions =
-                                    {
-                                        new ConditionExpression("som_processlevel", ConditionOperator.Equal, processLevel),
-                                        new ConditionExpression("som_casetype", ConditionOperator.Equal, caseTypeRef.Id),
-                                    }
-                                }
-                            },
-                            new LinkEntity("systemuser", "incident", "systemuserid", "ownerid", JoinOperator.LeftOuter)
-                            {
-                                Columns = new ColumnSet(false),
-                                LinkCriteria = new FilterExpression(LogicalOperator.And)
-                                {
-                                    Conditions =
-                                    {
-                                        new ConditionExpression("statecode", ConditionOperator.Equal, 0)
-                                    }
-                                }
-                            }
-                        }
-                    };
-                    var caseWorkerCases = service.RetrieveMultiple(caseWorkerCaseQuery)?.Entities;
+                    EntityObject = x.FirstOrDefault(),
+                    CapacityAvailable = x.FirstOrDefault().GetAttributeValue<int>("som_capacity") - x.Count(),
+                });
 
-                    var caseWorkers = caseWorkerCases?.GroupBy(x => x.Id)?.Select(x => new
-                    {
-                        EntityObject = x.FirstOrDefault(),
-                        CapacityAvailable = x.FirstOrDefault().GetAttributeValue<int>("som_capacity") - x.Count(),
-                    });
+                var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.Select(x => x.EntityObject)?.FirstOrDefault();
 
-                    var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.Select(x => x.EntityObject)?.FirstOrDefault();
-
-                    var caseUpdate = new Entity(target.LogicalName, target.Id);
-                    caseUpdate["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id);
-                    service.Update(caseUpdate);
-                }
+                var caseUpdate = new Entity(target.LogicalName, target.Id);
+                caseUpdate["ownerid"] = new EntityReference(caseWorker.LogicalName, caseWorker.Id);
+                service.Update(caseUpdate);
 
             }
             catch (Exception ex)
