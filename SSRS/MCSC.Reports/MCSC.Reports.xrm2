@@ -4,13 +4,14 @@
       "ConnectionProtocol": 3072,
       "OAuthAzureAppId": "",
       "OAuthAzureReplyUrl": "",
-      "OrganizationDisplayName": "MCSC-CRM-Test 1",
+      "OrganizationDisplayName": "MCSC-CRM-Dev",
       "OrganizationName": "unq5a5474e462fcec11811d001dd804f",
-      "OrganizationUrl": "https://mcsc-crmreplacement-test1.crm9.dynamics.com",
-      "OrganizationVersion": "9.2.23054.220",
-      "UserFriendlyName": "MCSC-TEST1",
+      "OrganizationUrl": "https://orgab6ce626.crm9.dynamics.com",
+      "OrganizationVersion": "9.2.23064.188",
+      "UserFriendlyName": "MCSC-DEV",
       "CurrentSolution": {
         "Id": "fd140aaf-4df4-11dd-bd17-0019b9312238",
+        "LogicalName": "solution",
         "Name": "Default Solution",
         "UniqueName": "Default"
       },
@@ -19,6 +20,21 @@
           "Name": "MCSC.Reports.rptproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Files": [
+            {
+              "CrmId": "24fb6ccb-bd36-ee11-bdf4-001dd8305de5",
+              "FileType": 12,
+              "RelativeFilePath": "\\Incapacitated Dependent Approval.rdl"
+            },
+            {
+              "CrmId": "d49bbd01-ed36-ee11-bdf4-001dd8305d5f",
+              "FileType": 12,
+              "RelativeFilePath": "\\MVA Questionnaire.rdl"
+            },
+            {
+              "CrmId": "9021b55e-dd36-ee11-bdf4-001dd83055bc",
+              "FileType": 12,
+              "RelativeFilePath": "\\Slip and Fall - Parking Lot.rdl"
+            },
             {
               "CrmId": "ca4f842c-4e0c-ee11-8f6d-001dd806e0cb",
               "FileType": 12,
@@ -70,6 +86,10 @@
           "ViewPath": "\\Views",
           "XmlPath": "\\Web",
           "XslPath": "\\Web"
+        },
+        {
+          "PluginStepNameTemplate": "{messageDisplayName} - {primaryEntityDisplayName} - {pipelineStageDisplayName}",
+          "SettingType": 1
         }
       ]
     }

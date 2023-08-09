@@ -223,7 +223,7 @@
                 <Value>Picture1</Value>
                 <Sizing>FitProportional</Sizing>
                 <Top>0.16667in</Top>
-                <Left>3.81125in</Left>
+                <Left>3.37375in</Left>
                 <Height>0.97917in</Height>
                 <Width>0.89583in</Width>
                 <Style>
@@ -275,7 +275,7 @@
                 </Paragraphs>
                 <rd:DefaultName>Textbox1</rd:DefaultName>
                 <Top>0.51958in</Top>
-                <Left>0.49875in</Left>
+                <Left>0.06125in</Left>
                 <Height>0.43875in</Height>
                 <Width>1.46875in</Width>
                 <ZIndex>1</ZIndex>
@@ -330,7 +330,7 @@
                 </Paragraphs>
                 <rd:DefaultName>Textbox2</rd:DefaultName>
                 <Top>1.21528in</Top>
-                <Left>2.94667in</Left>
+                <Left>2.50917in</Left>
                 <Height>0.46056in</Height>
                 <Width>2.5625in</Width>
                 <ZIndex>2</ZIndex>
@@ -500,10 +500,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox3</rd:DefaultName>
-                <Top>0.51958in</Top>
-                <Left>5.78in</Left>
+                <Top>0.16667in</Top>
+                <Left>5.3425in</Left>
                 <Height>1.15625in</Height>
-                <Width>2.345in</Width>
+                <Width>1.82417in</Width>
                 <ZIndex>3</ZIndex>
                 <Style>
                   <Border>
@@ -517,8 +517,9 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
+            <Left>0.4375in</Left>
             <Height>1.69792in</Height>
-            <Width>8.5in</Width>
+            <Width>7.16667in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -534,7 +535,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!som_currentexporteddate.Value, "Incapacitated_Dependent")</Value>
+                        <Value>=CDate(Microsoft.Crm.Reporting.RdlHelper.DateTimeUtility.ConvertUtcToLocalTime(DateTime.UtcNow, First(Fields!som_currentexporteddate.Value, "Incapacitated_Dependent")))</Value>
                         <Style />
                       </TextRun>
                     </TextRuns>
@@ -544,8 +545,8 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox12</rd:DefaultName>
-                <Top>0.11458in</Top>
-                <Left>2.94667in</Left>
+                <Top>0.0625in</Top>
+                <Left>2.50917in</Left>
                 <Height>0.25in</Height>
                 <Width>2.5625in</Width>
                 <Style>
@@ -604,8 +605,7 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox13</rd:DefaultName>
-                <Top>0.61681in</Top>
-                <Left>0.13542in</Left>
+                <Top>0.67236in</Top>
                 <Height>0.79167in</Height>
                 <Width>2.07292in</Width>
                 <ZIndex>1</ZIndex>
@@ -1119,9 +1119,8 @@
                 </Paragraphs>
                 <rd:DefaultName>Textbox14</rd:DefaultName>
                 <Top>1.58556in</Top>
-                <Left>0.13542in</Left>
                 <Height>5.16667in</Height>
-                <Width>8.36458in</Width>
+                <Width>7.16667in</Width>
                 <ZIndex>2</ZIndex>
                 <Style>
                   <Border>
@@ -1175,10 +1174,9 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox1</rd:DefaultName>
-                <Top>8.44556in</Top>
-                <Left>0.13542in</Left>
+                <Top>7.77889in</Top>
                 <Height>0.37625in</Height>
-                <Width>7.27083in</Width>
+                <Width>7.16667in</Width>
                 <ZIndex>3</ZIndex>
                 <Style>
                   <Border>
@@ -1192,9 +1190,10 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>1.76736in</Top>
-            <Height>9.21875in</Height>
-            <Width>8.5in</Width>
+            <Top>1.81944in</Top>
+            <Left>0.4375in</Left>
+            <Height>8.18639in</Height>
+            <Width>7.16667in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1206,7 +1205,7 @@
         <Height>21.54226in</Height>
         <Style />
       </Body>
-      <Width>14.76406in</Width>
+      <Width>7.98281in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
@@ -1217,16 +1216,6 @@
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="CRM_Filteredsom_workerscomp">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="som_workerscomp"&gt;&lt;all-attributes /&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>CRM Filteredsom workerscomp</Prompt>
-      <Hidden>true</Hidden>
-    </ReportParameter>
     <ReportParameter Name="CRM_UserTimeZoneName">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
@@ -1248,11 +1237,6 @@
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
       <CellDefinitions>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>CRM_Filteredsom_workerscomp</ParameterName>
-        </CellDefinition>
         <CellDefinition>
           <ColumnIndex>2</ColumnIndex>
           <RowIndex>0</RowIndex>

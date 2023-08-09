@@ -49,6 +49,9 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
+    <Report Include="Incapacitated Dependent Approval.rdl" />
+    <Report Include="MVA Questionnaire.rdl" />
+    <Report Include="Slip and Fall - Parking Lot.rdl" />
     <Report Include="Template.rdl" />
     <Report Include="Workers' Compensation Claim Form.rdl" />
   </ItemGroup>
