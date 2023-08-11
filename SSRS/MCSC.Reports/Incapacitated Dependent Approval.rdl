@@ -30,6 +30,8 @@
     &lt;attribute name="som_eeorretiree" /&gt;
     &lt;attribute name="som_currentexporteddate" /&gt;
     &lt;attribute name="som_carrierrecommendation" /&gt;
+    &lt;attribute name="som_dependentlifechangedate" /&gt;
+&lt;attribute name="som_benefitsactiveondependentlife" /&gt;
     &lt;attribute name="som_carrier" /&gt;
     &lt;order attribute="createdon" descending="false" /&gt;
     &lt;link-entity name="contact" from="contactid" to="som_contact" link-type="outer" alias="eert"&gt;
@@ -104,9 +106,25 @@
           <DataField>som_carrierEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="som_dependentlifechangedate">
+          <DataField>som_dependentlifechangedate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="eert_salutation">
           <DataField>eert_salutation</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="som_benefitsactiveondependentlife">
+          <DataField>som_benefitsactiveondependentlife</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="som_dependentlifechangedateValue">
+          <DataField>som_dependentlifechangedateValue</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="som_benefitsactiveondependentlifeValue">
+          <DataField>som_benefitsactiveondependentlifeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="eert_lastname">
           <DataField>eert_lastname</DataField>
@@ -208,6 +226,12 @@
         </Field>
         <Field Name="his_hers">
           <Value>=iif(Fields!eert_gendercodeValue.Value = 1, "his", "hers")</Value>
+        </Field>
+        <Field Name="Blurb1">
+          <Value>=iif(Fields!eert_gendercodeValue.Value = 1, "Eligibility has been extended only for the benefits " + Fields!he_she.Value + " is covered under at the time of your retirement.", "Eligibility has been extended only for the benefits " + Fields!he_she.Value + " is covered under.")</Value>
+        </Field>
+        <Field Name="Blurb2">
+          <Value>=iif(IsNothing(Fields!som_dependentlifechangedate.Value) And Fields!som_benefitsactiveondependentlife.Value = false, "", iif(Not IsNothing(Fields!som_dependentlifechangedate.Value) And CBool(Fields!som_benefitsactiveondependentlife.Value) = false, Fields!he_she.Value &amp; " does not qualify for dependent life insurance, as that coverage terminated when " &amp; Fields!he_she.Value &amp; " turned 23 years old.", ""))</Value>
         </Field>
       </Fields>
     </DataSet>
@@ -857,7 +881,42 @@
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value> coverage does not terminate for any other reason.</Value>
+                        <Value> coverage does not terminate for any other reason. </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial Narrow</FontFamily>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Blurb1</Label>
+                        <Value>=First(Fields!Blurb1.Value, "Incapacitated_Dependent")</Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial Narrow</FontFamily>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value xml:space="preserve"> </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial Narrow</FontFamily>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Blurb2</Label>
+                        <Value>=First(Fields!Blurb2.Value, "Incapacitated_Dependent")</Value>
                         <Style>
                           <FontStyle>Normal</FontStyle>
                           <FontFamily>Arial Narrow</FontFamily>
@@ -930,7 +989,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>If you have any questions, please contact the Employee Benefits Division at 800‑505‑5011.</Value>
+                        <Value>If you have any questions, please contact the Employee Benefits Division at 800-505-5011.</Value>
                         <Style>
                           <FontStyle>Normal</FontStyle>
                           <FontFamily>Arial Narrow</FontFamily>
