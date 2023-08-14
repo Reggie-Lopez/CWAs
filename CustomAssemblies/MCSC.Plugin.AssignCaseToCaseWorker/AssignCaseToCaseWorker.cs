@@ -15,15 +15,19 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
         const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
         public void Execute(IServiceProvider serviceProvider)
         {
+            _trace.Trace("Initializing services and context.");
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
+
+            _trace.Trace("Entering try block.");
 
             try
             {
                 var target = (Entity)context.InputParameters?["Target"];
                 if (target == null) return;
 
+                _trace.Trace("Retrieving target entity.");
                 var caseRecord = service.Retrieve(target.LogicalName, target.Id, new ColumnSet("primarycontactid", "som_casetype"));
 
                 var contactRef = caseRecord.GetAttributeValue<EntityReference>("primarycontactid");
@@ -32,11 +36,13 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 if (caseTypeRef == null) return; //return if the case type is empty
                 if (contactRef == null) return; //return if the contact is empty
 
+                _trace.Trace("Validating case type and contact.");
                 var contact = service.Retrieve(contactRef.LogicalName, contactRef.Id, new ColumnSet("som_processlevel"));
                 var caseType = service.Retrieve("som_casetype", caseTypeRef.Id, new ColumnSet("som_name"));
                 var caseTypeName = caseType.GetAttributeValue<string>("som_name");
                 var processLevel = contact.GetAttributeValue<string>("som_processlevel");
 
+                _trace.Trace("Retrieving contact and case type details.");
                 var excludeProcessLevels = new List<string>()
                 {
 
@@ -44,6 +50,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
 
                 if (excludeProcessLevels.Contains(processLevel)) return;
 
+                _trace.Trace("Checking exclusion rules.");
                 var caseTypeNames = new List<string>()
                 {
                     "LoA",
@@ -53,7 +60,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
 
                 if (!caseTypeNames.Contains(caseTypeName)) return;
 
-
+                _trace.Trace("Build Case Assignment Query");
                 var caseAssignmentQuery = new QueryExpression("som_caseassignment")
                 {
                     ColumnSet = new ColumnSet("som_assigneeid"),
@@ -67,8 +74,10 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                     }
                 };
 
+                _trace.Trace("Retreiving Case Assignments");
                 var caseAssignments = service.RetrieveMultiple(caseAssignmentQuery)?.Entities;
 
+                _trace.Trace("Evaluate Case Assignments Retreived for a single record");
                 // If only one case assignment record is found, assign the case to the assignee
                 if (caseAssignments != null && caseAssignments.Count == 1)
                 {
@@ -80,10 +89,12 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 }
 
 
-
+                _trace.Trace("If multiple case assignments retrieved, Evaluate Teams");
                 // If more than one case assignment record is found, check if any of them is a team
                 var teamAssignments = caseAssignments?.Where(x => x.GetAttributeValue<EntityReference>("som_assigneeid").LogicalName == "team");
 
+
+                _trace.Trace("If team found, assign to team");
                 if (teamAssignments != null && teamAssignments.Any())
                 {
                     // If a team is found, assign the case to the first team
@@ -93,6 +104,7 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
                 }
                 else
                 {
+                    _trace.Trace("No Team found, assigning to user based on capacity");
                     // If no team is found, use the existing capacity logic to assign the case to a user
                     var caseWorkerCases = caseAssignments?.Where(x => x.GetAttributeValue<EntityReference>("som_assigneeid").LogicalName == "systemuser");
 
@@ -104,6 +116,8 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
 
                     var caseWorker = caseWorkers?.OrderByDescending(x => x.CapacityAvailable)?.Select(x => x.EntityObject)?.FirstOrDefault();
 
+
+                    _trace.Trace("Assigning to Case Worker");
                     if (caseWorker != null)
                     {
                         var caseUpdate = new Entity(target.LogicalName, target.Id);
