@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk.Workflow;
 using Microsoft.Xrm.Sdk;
 using System.Activities;
 using Microsoft.Xrm.Sdk.Query;
+using System.Diagnostics;
 
 namespace MCSC.CWA.CheckUserHasRoles
 {
@@ -27,6 +28,8 @@ namespace MCSC.CWA.CheckUserHasRoles
         {
             var context = executionContext.GetExtension<IWorkflowContext>();
             var service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+            var __trace = executionContext.GetExtension<ITracingService>();
+
 
             try
             {
@@ -113,7 +116,11 @@ namespace MCSC.CWA.CheckUserHasRoles
             }
             catch (Exception ex)
             {
-                service.Create(new Entity("som_logentry")
+                //create new instance of IOrganizationService
+                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+
+
+                _service.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -123,7 +130,10 @@ namespace MCSC.CWA.CheckUserHasRoles
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                return;
+                __trace.Trace("Entering catch block.");
+                __trace.Trace(ex.ToString());
+                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                throw new InvalidPluginExecutionException(ex.Message);
             }
         }
     }

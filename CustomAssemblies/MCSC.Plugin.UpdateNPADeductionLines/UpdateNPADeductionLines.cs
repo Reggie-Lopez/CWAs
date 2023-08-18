@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -17,7 +20,8 @@ namespace MCSC.Plugin.UpdateNPADeductionLines
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
-
+            var __trace = executionContext.GetExtension<ITracingService>();
+            
             try
             {
                 Entity target = new Entity();
@@ -43,15 +47,24 @@ namespace MCSC.Plugin.UpdateNPADeductionLines
             }
             catch (Exception ex)
             {
-                service.Create(new Entity("som_logentry")
+                //create new instance of IOrganizationService
+                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+
+
+                _service.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
                     ["som_details"] = ex.StackTrace,
                     ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
-                    ["som_recordlogicalname"] = $"{context?.PrimaryEntityName}",
-                    ["som_recordid"] = $"{context?.PrimaryEntityId}",
+                    ["som_recordlogicalname"] = $"systemuser",
+                    ["som_recordid"] = $"{context?.UserId}",
                 });
+
+                __trace.Trace("Entering catch block.");
+                __trace.Trace(ex.ToString());
+                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                throw new InvalidPluginExecutionException(ex.Message);
             }
         }
 

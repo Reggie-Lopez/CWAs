@@ -30,6 +30,36 @@
           ]
         },
         {
+          "Name": "MCSC.CWA.CheckUserHasRoles.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "9d0346bf-9802-468e-bfad-92e626307080",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetContactFromEmail.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "f9df213b-2280-4442-82e8-d6eba532ac9b",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
           "Name": "MCSC.CWA.GetUserReferenceByName.csproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Files": [
