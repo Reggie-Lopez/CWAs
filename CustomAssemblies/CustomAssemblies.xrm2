@@ -60,6 +60,37 @@
           ]
         },
         {
+          "Name": "MCSC.CWA.GetSystemSettingRecord.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "147f9be3-625c-4ab3-af18-ae3b3619ca91",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetSystemSettingValue.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "39da7fe6-2a98-4230-8c43-94f3750e9045",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.CWA.GetSystemSettingValue.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
           "Name": "MCSC.CWA.GetUserReferenceByName.csproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Files": [
@@ -100,6 +131,22 @@
           ]
         },
         {
+          "Name": "MCSC.Plugin.AddCaseworkerToLoA.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "551abd7e-9319-43f1-94b5-ca4a3a7aeaac",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.Plugin.AddCaseworkerToLoA.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
           "Name": "MCSC.Plugin.AssignCaseToCaseWorker.csproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Properties": [
@@ -115,6 +162,37 @@
           ]
         },
         {
+          "Name": "MCSC.Plugin.ConvertEmailToTransaction.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "30e94773-1e1b-4bf9-8b75-9c35e3006c80",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.PopulateCaseAuditQuestions.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "7bf2d15e-8e09-4e2b-a232-f0d79b0d5c39",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.Plugin.PopulateCaseAuditQuestions.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
           "Name": "MCSC.Plugin.RenderWordTemplateForTransaction.csproj",
           "RemoveLinksToFilesThatDoNotExistOnDisk": true,
           "Properties": [
@@ -124,6 +202,22 @@
                 "Id": "43754ed0-5ff4-4202-b9b0-15f0bdeeea8a",
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.UpdateNPADeductionLines.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "fc30dfc5-f846-4149-9af4-c454e0711120",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.Plugin.UpdateNPADeductionLines.dll",
                 "SourceType": 0
               }
             }

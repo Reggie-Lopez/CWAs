@@ -39,11 +39,11 @@ namespace MCSC.CWA.GetContactFromEmail
         {
             var context = executionContext.GetExtension<IWorkflowContext>();
             var service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
-            var __trace = executionContext.GetExtension<ITracingService>();
+            var trace = executionContext.GetExtension<ITracingService>();
 
             try
             {
-                __trace.Trace("Entering try block.");
+                trace.Trace("Entering try block.");
                 var userId = context.UserId;
                 var fieldToSearch = FieldToSearch.Get(executionContext) ?? "";
                 var identifier = Identifier.Get(executionContext) ?? "";
@@ -53,12 +53,12 @@ namespace MCSC.CWA.GetContactFromEmail
                 if (string.IsNullOrEmpty(fieldToSearch) || string.IsNullOrEmpty(identifier) || numChars == "-1" || email == null) throw new InvalidPluginExecutionException("All of the Input Parameters have not been set on the workflow step.");
 
                 //using the 'field to search' and the email, get the value of the field
-                __trace.Trace("Getting value of field to search.");
+                trace.Trace("Getting value of field to search.");
                 var fieldToSearchValue = GetValueOfFieldToSearch(service, email, fieldToSearch);
                 if (string.IsNullOrEmpty(fieldToSearchValue)) throw new InvalidPluginExecutionException("The 'Field To Search' provided is invalid or no Email found.");
 
                 //using the 'identifier', get the employee id
-                __trace.Trace("Getting employee id.");
+                trace.Trace("Getting employee id.");
                 var splFieldValue = fieldToSearchValue.Split(new string[] { identifier }, StringSplitOptions.None);
 
                 //check that the identifier is actually found in the field's value
@@ -68,7 +68,7 @@ namespace MCSC.CWA.GetContactFromEmail
                 var actualValWanted = splFieldValue[1].TrimStart().Substring(0, int.Parse(numChars));
 
                 // search for a contact using that employee id
-                __trace.Trace("Getting contact from employee id.");
+                trace.Trace("Getting contact from employee id.");
                 var getContactFromVal = GetContact(service, actualValWanted);
                 if (getContactFromVal == null) throw new InvalidPluginExecutionException("No Contact found from the value in the field's specified.");
 
@@ -79,13 +79,18 @@ namespace MCSC.CWA.GetContactFromEmail
             }
             catch (Exception ex)
             {
-                
 
-                //create new instance of IOrganizationService
-                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+                trace.Trace("CheckUserHasRoles: Exception caught");
+                trace.Trace("Entering catch block.");
+                trace.Trace(ex.ToString());
+                trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                trace.Trace("Creating log entry");
 
 
-                _service.Create(new Entity("som_logentry")
+                //Instantiate new orgnization service.
+                var logService = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(null);
+
+                logService.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -95,9 +100,7 @@ namespace MCSC.CWA.GetContactFromEmail
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                __trace.Trace("Entering catch block.");
-                __trace.Trace(ex.ToString());
-                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+              
                 throw new InvalidPluginExecutionException(ex.Message);
 
 

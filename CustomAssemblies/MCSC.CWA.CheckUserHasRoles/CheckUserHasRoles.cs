@@ -28,11 +28,14 @@ namespace MCSC.CWA.CheckUserHasRoles
         {
             var context = executionContext.GetExtension<IWorkflowContext>();
             var service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
-            var __trace = executionContext.GetExtension<ITracingService>();
+            var trace = executionContext.GetExtension<ITracingService>();
 
 
             try
             {
+                // add tracing throughout execution 
+
+                trace.Trace("CheckUserHasRoles: Begin execution");
                 var userId = context.UserId;
                 var roleNames = RoleNames.Get(executionContext) ?? "";
                 var requireAll = RequireAll.Get(executionContext);
@@ -41,6 +44,8 @@ namespace MCSC.CWA.CheckUserHasRoles
 
                 var names = roleNames.Split(',');
 
+
+                trace.Trace("CheckUserHasRoles: Querying for user roles");
                 var userQuery = new QueryExpression("role")
                 {
                     ColumnSet = new ColumnSet("name"),
@@ -60,6 +65,8 @@ namespace MCSC.CWA.CheckUserHasRoles
                     Criteria = new FilterExpression(LogicalOperator.Or)
                 };
 
+
+                trace.Trace("CheckUserHasRoles: Querying for team roles");
                 var teamsQuery = new QueryExpression("role")
                 {
                     ColumnSet = new ColumnSet("name"),
@@ -85,12 +92,15 @@ namespace MCSC.CWA.CheckUserHasRoles
                     Criteria = new FilterExpression(LogicalOperator.Or)
                 };
 
+                trace.Trace("CheckUserHasRoles: Adding conditions to queries");
                 foreach (var name in names)
                 {
+                    trace.Trace($"CheckUserHasRoles: Adding condition for {name}");
                     userQuery.Criteria.AddCondition("name", ConditionOperator.Equal, name);
                     teamsQuery.Criteria.AddCondition("name", ConditionOperator.Equal, name);
                 }
 
+                trace.Trace("CheckUserHasRoles: Executing queries");
                 var userRoles = service.RetrieveMultiple(userQuery)?.Entities?.Select(x => x.GetAttributeValue<string>("name"))?.ToList()
                     ?? new List<string>();
 
@@ -103,6 +113,8 @@ namespace MCSC.CWA.CheckUserHasRoles
 
                 var roleCount = roles.Count;
 
+
+                trace.Trace("CheckUserHasRoles: Setting output");
                 if (requireAll)
                 {
                     UserHasRoles.Set(executionContext, roleCount = roleNames.Length);
@@ -116,11 +128,16 @@ namespace MCSC.CWA.CheckUserHasRoles
             }
             catch (Exception ex)
             {
-                //create new instance of IOrganizationService
-                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+                trace.Trace("CheckUserHasRoles: Exception caught");
+                trace.Trace("Entering catch block.");
+                trace.Trace(ex.ToString());
+                trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                trace.Trace("Creating log entry");
 
+                //Instantiate new orgnization service.
+                var logService = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(null);
 
-                _service.Create(new Entity("som_logentry")
+                logService.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -130,9 +147,7 @@ namespace MCSC.CWA.CheckUserHasRoles
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                __trace.Trace("Entering catch block.");
-                __trace.Trace(ex.ToString());
-                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                
                 throw new InvalidPluginExecutionException(ex.Message);
             }
         }

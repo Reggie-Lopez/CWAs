@@ -19,18 +19,22 @@ namespace MCSC.Plugin.AddCaseworkerToLoA
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
-            var __trace = executionContext.GetExtension<ITracingService>();
 
+
+            _trace.Trace("Entering try block.");
             try
             {
+                _trace.Trace("Checking for Target Input Parameter.");
                 if (context.InputParameters["Target"] == null) { throw new InvalidPluginExecutionException("The Target Input Parameter is missing for this plugin."); }
                 if (!string.Equals(context.MessageName, "Update", StringComparison.CurrentCultureIgnoreCase)) return;
                 if (context.PrimaryEntityName != "som_leaveofabsence") return;
 
                 //loaId Target Parameter
+                _trace.Trace("Getting Target Input Parameter.");
                 var executingUser = context.UserId;
                 var loaId = context.PrimaryEntityId;
 
+                _trace.Trace("Checking if user is already a caseworker.");
                 var userAlreadyCaseworker = CheckIfUserIsCaseworker(service, executingUser, loaId);
                 if (!userAlreadyCaseworker)
                 {
@@ -39,11 +43,20 @@ namespace MCSC.Plugin.AddCaseworkerToLoA
             }
             catch (Exception ex)
             {
-                //create new instance of IOrganizationService
-                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
 
+                _trace.Trace("CheckUserHasRoles: Exception caught");
+                _trace.Trace("Entering catch block.");
+                _trace.Trace(ex.ToString());
+                _trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                _trace.Trace("Creating log entry");
 
-                _service.Create(new Entity("som_logentry")
+                // Get the service factory
+                var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+
+                // Create new instance of IOrganizationService
+                var logService = serviceFactory.CreateOrganizationService(context.UserId);
+
+                logService.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -53,13 +66,11 @@ namespace MCSC.Plugin.AddCaseworkerToLoA
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                __trace.Trace("Entering catch block.");
-                __trace.Trace(ex.ToString());
-                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
                 throw new InvalidPluginExecutionException(ex.Message);
             }
+        }
 
-        private void AssociateUserAndLoA(IOrganizationService service, Guid executingUser, Guid loaId)
+            private void AssociateUserAndLoA(IOrganizationService service, Guid executingUser, Guid loaId)
         {
             Relationship relationship = new Relationship("som_som_leaveofabsence_systemuser");
             EntityReferenceCollection relatedEntities = new EntityReferenceCollection();

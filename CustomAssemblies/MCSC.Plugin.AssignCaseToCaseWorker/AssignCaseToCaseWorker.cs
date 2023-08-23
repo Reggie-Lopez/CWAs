@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -128,11 +129,29 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
             }
             catch (Exception ex)
             {
-                // Write exception details to the plugin trace log
-                _trace.Trace($"Exception: {ex.Message} \n{ex.StackTrace}");
+                _trace.Trace("CheckUserHasRoles: Exception caught");
+                _trace.Trace("Entering catch block.");
+                _trace.Trace(ex.ToString());
+                _trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                _trace.Trace("Creating log entry");
 
-                // Re-throw the exception to ensure it's caught by Dynamics 365
-                throw;
+                // Get the service factory
+                var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+
+                // Create new instance of IOrganizationService
+                var logService = serviceFactory.CreateOrganizationService(context.UserId);
+
+                logService.Create(new Entity("som_logentry")
+                {
+                    ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+                    ["som_name"] = ex.Message,
+                    ["som_details"] = ex.StackTrace,
+                    ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
+                    ["som_recordlogicalname"] = $"systemuser",
+                    ["som_recordid"] = $"{context?.UserId}",
+                });
+
+                throw new InvalidPluginExecutionException(ex.Message);
             }
         }
     }

@@ -21,7 +21,6 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
-            var __trace = executionContext.GetExtension<ITracingService>();
 
             try
             {
@@ -67,11 +66,19 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
             }
             catch (Exception ex)
             {
-                //create new instance of IOrganizationService
-                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
+                _trace.Trace("RenderWordTemplateForTransaction: Exception caught");
+                _trace.Trace("Entering catch block.");
+                _trace.Trace(ex.ToString());
+                _trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                _trace.Trace("Creating log entry");
 
+                // Get the service factory
+                var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
 
-                _service.Create(new Entity("som_logentry")
+                // Create new instance of IOrganizationService
+                var logService = serviceFactory.CreateOrganizationService(context.UserId);
+
+                logService.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -81,9 +88,6 @@ namespace MCSC.Plugin.RenderWordTemplateForTransaction
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                __trace.Trace("Entering catch block.");
-                __trace.Trace(ex.ToString());
-                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
                 throw new InvalidPluginExecutionException(ex.Message);
             }
         }

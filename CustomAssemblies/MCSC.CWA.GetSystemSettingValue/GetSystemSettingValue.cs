@@ -32,31 +32,42 @@ namespace MCSC.CWA.GetSystemSettingValue
         {
             var context = executionContext.GetExtension<IWorkflowContext>();
             var service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
-            var __trace = executionContext.GetExtension<ITracingService>();
+            var trace = executionContext.GetExtension<ITracingService>();
 
             try
             {
+
+                trace.Trace("Entering try block.");
                 var userId = context.UserId;
                 var sysSettingName = SystemSettingName.Get(executionContext) ?? "";
                 var val1OrVal2 = Value1OrValue2.Get(executionContext) ?? "";
 
+
+                trace.Trace("Getting value of field to search.");
                 if (string.IsNullOrEmpty(sysSettingName) || string.IsNullOrEmpty(val1OrVal2)) throw new InvalidPluginExecutionException("All of the Input Parameters have not been set on the workflow step.");
 
                 //using the 'sysSettingName', get the value of the system setting record
                 var sysSettingVal = FindSystemSettingRecord(service, sysSettingName, val1OrVal2);
 
                 //return either the value1 or value2 of the systems etting record
+                trace.Trace("Returning system setting value.");
                 SystemSettingValue.Set(executionContext, sysSettingVal);
                 return;
 
             }
             catch (Exception ex)
             {
-                //create new instance of IOrganizationService
-                var _service = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(context.UserId);
 
+                trace.Trace("CheckUserHasRoles: Exception caught");
+                trace.Trace("Entering catch block.");
+                trace.Trace(ex.ToString());
+                trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+                trace.Trace("Creating log entry");
 
-                _service.Create(new Entity("som_logentry")
+                //Instantiate new orgnization service.
+                var logService = executionContext.GetExtension<IOrganizationServiceFactory>().CreateOrganizationService(null);
+
+                logService.Create(new Entity("som_logentry")
                 {
                     ["som_source"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                     ["som_name"] = ex.Message,
@@ -66,9 +77,7 @@ namespace MCSC.CWA.GetSystemSettingValue
                     ["som_recordid"] = $"{context?.UserId}",
                 });
 
-                __trace.Trace("Entering catch block.");
-                __trace.Trace(ex.ToString());
-                __trace.Trace("Severity: " + LOG_ENTRY_SEVERITY_ERROR.ToString());
+              
                 throw new InvalidPluginExecutionException(ex.Message);
             }
         }
