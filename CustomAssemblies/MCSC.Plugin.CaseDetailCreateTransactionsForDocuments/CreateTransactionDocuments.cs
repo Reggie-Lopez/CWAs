@@ -16,15 +16,21 @@ namespace MCSC.Plugin.CaseDetailTransactionDocuments
 {
     public class CreateTransactionDocuments : IPlugin
     {
+        ITracingService _trace;
         private List<string> validCaseDetailEntities = new List<string> { "som_appeal" };
         const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
 
         public void Execute(IServiceProvider serviceProvider)
         {
+
+            _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            _trace.Trace("Initializing services and context.");
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var orgService = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory)))
                 .CreateOrganizationService(context.UserId);
 
+
+            _trace.Trace("Entering try block.");
             if (!context.InputParameters.Contains("Target"))
             {
                 throw new Exception("Target is not provided.");
@@ -32,6 +38,7 @@ namespace MCSC.Plugin.CaseDetailTransactionDocuments
 
             Entity target = context.InputParameters["Target"] is Entity ? (Entity)context.InputParameters["Target"] : null;
 
+            _trace.Trace("Retrieving target entity.");
             if (!(target is Entity))
             {
                 throw new InvalidPluginExecutionException("Invalid Target type provided.");
@@ -39,16 +46,22 @@ namespace MCSC.Plugin.CaseDetailTransactionDocuments
 
             var isValid = validCaseDetailEntities.Contains(target.LogicalName);
 
+            _trace.Trace("Validating target entity.");
             if (!isValid)
             {
                 throw new InvalidPluginExecutionException("Target type provided not configured.");
             }
 
+            _trace.Trace("Checking message name.");
             if (context.MessageName.ToUpper() == "UPDATE")
             {
+
+                _trace.Trace("Checking portal acknowledgement.");
                 var portalAcknowledgement = target.GetAttributeValue<bool>("som_portalacknowledgement");
                 if (portalAcknowledgement)
                 {
+
+                    _trace.Trace("Checking if case detail is closed.");
                     try
                     {
                         Execute(orgService, target);

@@ -20,18 +20,24 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
+            _trace.Trace("Entering try block.");
             try
             {
                 Entity target = new Entity();
                 Entity targetPre = new Entity();
 
+                _trace.Trace("Retrieving target entity.");
+
                 if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity)
                 {
+
+                    _trace.Trace("Retrieving post image.");
                     target = (Entity)context.PostEntityImages["PostImage"];
                     targetPre = (Entity)context.PreEntityImages["PreImage"];
                     if (target == null) return;
                 }
 
+                _trace.Trace("Checking message name.");
                 var auditor = target.GetAttributeValue<EntityReference>("som_auditor");
                 var documentType = target.GetAttributeValue<EntityReference>("som_documenttype");
                 var auditorPre = targetPre.GetAttributeValue<EntityReference>("som_auditor");
@@ -40,17 +46,23 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                 //document type/auditor. document type is a required field
 
                 //if document type changes, always remove all audit questions
+                _trace.Trace("Checking document type.");    
                 if (documentTypePre != documentType)
-                {                    
+                {
+                    _trace.Trace("Removing all existing audit questions."); 
                     RemoveAllExistingAuditQuestions(service, target.Id);                   
                 }
                 else
                 {
+
+                    _trace.Trace("Checking if auditor changed.");   
                     //if document type does not change but the auditor DOES, then just return since the audit questions should stay the same. if auditor
                     if (auditorPre != auditor)
                     {
+                        _trace.Trace("Checking if auditor is null.");
                         if (auditor == null)
                         {
+                            _trace.Trace("Removing all existing audit questions.");
                             RemoveAllExistingAuditQuestions(service, target.Id);
                             return;
                         }
@@ -62,10 +74,11 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                 }
 
                 //if auditor is blank, return. code above will remove all audit questions, assuming document type changes
+                _trace.Trace("Checking if auditor is null.");
                 if (auditor == null) return;
 
 
-
+                _trace.Trace("Checking if document type is null.");
                 var query = new QueryExpression("som_question")
                 {
                     ColumnSet = new ColumnSet("som_name", "som_errortype"),
@@ -85,12 +98,15 @@ namespace MCSC.Plugin.PopulateTransactionAuditQuestions
                     }
                 };
 
+                _trace.Trace("Retrieving questions.");
                 var questions = service.RetrieveMultiple(query)?.Entities?.ToList() ?? new List<Entity>();
 
                 foreach (var question in questions)
                 {
+                    _trace.Trace("Creating audit question.");
                     var auditQuestion = new Entity("som_auditquestion")
                     {
+                       
                         ["som_question"] = question.ToEntityReference(),
                         ["som_transaction"] = target.Id,
                         ["som_name"] = question.GetAttributeValue<string>("som_objective1.som_name"),

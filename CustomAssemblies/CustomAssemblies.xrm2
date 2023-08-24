@@ -3,6 +3,329 @@
   "Organizations": [
     {
       "ConnectionProtocol": 3072,
+      "OrganizationDisplayName": "MCSC-CRM-Test 1",
+      "OrganizationName": "unq5a5474e462fcec11811d001dd804f",
+      "OrganizationUrl": "https://mcsc-crmreplacement-test1.crm9.dynamics.com",
+      "UserFriendlyName": "MCSC-TEST1",
+      "CurrentSolution": {
+        "Id": "2c6bc755-70be-4748-9c9d-03b08bc8f43c",
+        "Name": "MCSC_Sprint5",
+        "UniqueName": "MCSC_Sprint5_Complete"
+      },
+      "Projects": [
+        {
+          "Name": "JavaScript.Assets.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Files": [
+            {
+              "CrmId": "dd8a6299-752b-ee11-9965-001dd83014b3",
+              "FileType": 3,
+              "RelativeFilePath": "\\Web\\som_Contact.js"
+            },
+            {
+              "CrmId": "85749021-812c-ee11-9965-001dd8301146",
+              "FileType": 3,
+              "RelativeFilePath": "\\Web\\workstreamFunctions.js"
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.CheckUserHasRoles.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "9d0346bf-9802-468e-bfad-92e626307080",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetContactFromEmail.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "f9df213b-2280-4442-82e8-d6eba532ac9b",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetDateDiff.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "a7b910e5-a093-4772-a854-6b88d7743510",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetSystemSettingRecord.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "147f9be3-625c-4ab3-af18-ae3b3619ca91",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetSystemSettingValue.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "39da7fe6-2a98-4230-8c43-94f3750e9045",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.CWA.GetUserReferenceByName.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Files": [
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 30,
+              "PluginClassType": 2,
+              "RelativeFilePath": "\\BaseWorkflow.cs"
+            },
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 46,
+              "RelativeFilePath": "\\MessageNames.cs"
+            },
+            {
+              "CrmId": "00000000-0000-0000-0000-000000000000",
+              "FileType": 45,
+              "RelativeFilePath": "\\TableNames.cs"
+            }
+          ],
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "1ba7a1a6-375a-465a-b966-282a7096851c",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "PathNameOnServer": "MCSC.CWA.GetUserReferenceByName.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.AddCaseworkerToLoA.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "551abd7e-9319-43f1-94b5-ca4a3a7aeaac",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.AssignCaseToCaseWorker.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "e7cbc3ca-a202-489c-9e4e-1076e7fd145c",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.CaseDetailTransactionDocuments.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "8d5434ce-e294-4859-b418-eba85bfd3df9",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.ConvertEmailToTransaction.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "30e94773-1e1b-4bf9-8b75-9c35e3006c80",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.DeductionLineSplit.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "f9294546-47a5-4169-8e56-cb2865b0f90e",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.PopulateCaseAuditQuestions.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "7bf2d15e-8e09-4e2b-a232-f0d79b0d5c39",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.PopulateTransactionAuditQuestions.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "d59a0af1-7b83-4933-92f9-6820188538ea",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.RenderWordTemplateForTransaction.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "43754ed0-5ff4-4202-b9b0-15f0bdeeea8a",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.UpdateNPADeductionLines.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "fc30dfc5-f846-4149-9af4-c454e0711120",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "Settings": [
+        {
+          "CssMinification": 1,
+          "JavaScriptMinification": 1,
+          "SettingType": 6
+        },
+        {
+          "AddDebuggerNonUserCodeAttribute": true,
+          "AddExcludeFromCodeCoverageAttribute": true,
+          "AddStringLengthAttribute": false,
+          "BaseProxyClassFileName": "BaseProxyClass",
+          "CustomProxyNamingServiceDllPath": "",
+          "EnumsFileName": "OptionSetEnums",
+          "GeneratedCodeAttributeVersionPrecision": 4,
+          "GenerateProxyEnumsInSeparateClasses": true,
+          "MakeAllPropertiesEditable": false,
+          "ProxyEntityClassPath": "\\ProxyClasses",
+          "ProxyEntityNamingConvention": 1,
+          "ProxyEntityNamingPattern": "{0}",
+          "ProxyEnumPath": "\\ProxyClasses\\Enums",
+          "ProxyGenerationMethod": 1,
+          "ProxyMessagesPath": "\\ProxyClasses\\Messages",
+          "ProxyNamingMethod": 0,
+          "ServiceContextName": "CrmServiceContext",
+          "SettingType": 4,
+          "UseStronglyTypedNameForProxyRelatedEntities": true
+        },
+        {
+          "ChartPath": "\\Charts",
+          "CssPath": "\\Web",
+          "CustomAssemblyConfigPath": "\\AssemblyConfig",
+          "EmailTemplatePath": "\\EmailTemplates",
+          "EntityMetadataPath": "\\EntityMetadata",
+          "HtmlPath": "\\Web",
+          "ImagePath": "\\Web",
+          "JavaScriptPath": "\\Web",
+          "PluginConfigurationsPath": "\\PluginConfigurations",
+          "ProcessPath": "\\Processes",
+          "ResourcePath": "\\Web",
+          "SettingType": 5,
+          "SilverlightPath": "\\Xap",
+          "SitemapPath": "\\Sitemap",
+          "TypeScriptIntellisensePath": "\\Web\\IntellisenseFiles",
+          "TypeScriptPath": "\\Web",
+          "ViewPath": "\\Views",
+          "XmlPath": "\\Web",
+          "XslPath": "\\Web"
+        }
+      ]
+    },
+    {
+      "ConnectionProtocol": 3072,
       "OrganizationDisplayName": "MCSC-CRM-Dev",
       "OrganizationName": "unqa9dd937c67114b3c9e2a06b687ff9",
       "OrganizationUrl": "https://orgab6ce626.crm9.dynamics.com",
@@ -84,7 +407,6 @@
                 "Id": "39da7fe6-2a98-4230-8c43-94f3750e9045",
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
-                "PathNameOnServer": "MCSC.CWA.GetSystemSettingValue.dll",
                 "SourceType": 0
               }
             }
@@ -140,7 +462,6 @@
                 "Id": "551abd7e-9319-43f1-94b5-ca4a3a7aeaac",
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
-                "PathNameOnServer": "MCSC.Plugin.AddCaseworkerToLoA.dll",
                 "SourceType": 0
               }
             }
@@ -154,6 +475,21 @@
               "PropertiesType": 1,
               "Config": {
                 "Id": "e7cbc3ca-a202-489c-9e4e-1076e7fd145c",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.CaseDetailTransactionDocuments.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "8d5434ce-e294-4859-b418-eba85bfd3df9",
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
                 "SourceType": 0
@@ -186,7 +522,21 @@
                 "Id": "7bf2d15e-8e09-4e2b-a232-f0d79b0d5c39",
                 "IsolationMode": 2,
                 "IsRegisteredInCrm": true,
-                "PathNameOnServer": "MCSC.Plugin.PopulateCaseAuditQuestions.dll",
+                "SourceType": 0
+              }
+            }
+          ]
+        },
+        {
+          "Name": "MCSC.Plugin.PopulateTransactionAuditQuestions.csproj",
+          "RemoveLinksToFilesThatDoNotExistOnDisk": true,
+          "Properties": [
+            {
+              "PropertiesType": 1,
+              "Config": {
+                "Id": "d59a0af1-7b83-4933-92f9-6820188538ea",
+                "IsolationMode": 2,
+                "IsRegisteredInCrm": true,
                 "SourceType": 0
               }
             }

@@ -17,20 +17,25 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
         public void Execute(IServiceProvider serviceProvider)
         {
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            _trace.Trace("Initializing services and context.");
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
             try
             {
+
+                _trace.Trace("Entering try block.");
                 //confirm inputparameters exist
                 if (context.InputParameters == null) { throw new InvalidPluginExecutionException("Input Parameters are not being passed into this plugin."); }
                 if (context.InputParameters["AttachmentIdList"] == null) { throw new InvalidPluginExecutionException("The AttachmentIdList Input Parameter is missing for this plugin."); }
                 if (context.InputParameters["Target"] == null) { throw new InvalidPluginExecutionException("The Target Input Parameter is missing for this plugin."); }
 
                 //email Target Parameter
+                _trace.Trace("Retrieving target entity.");
                 var emailId = (EntityReference)context.InputParameters["Target"];
 
                 //attachment InputParameter
+                _trace.Trace("Retrieving attachment list.");
                 var attachmentIdList = new List<Guid>();
                 var attachmentIds = context.InputParameters["AttachmentIdList"].ToString();
                 var attIdsSplit = attachmentIds.Split(',');
@@ -40,6 +45,7 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 var transactionId = (string)context.InputParameters["ExistingTransactionId"];
 
                 //check if ExistingTransactionId is provided
+                _trace.Trace("Checking for existing transaction.");
                 if (transactionId == null)
                 {
                     //if there is not an ExistingTransactionId provided, then create new Transaction record, return GUID as Output
@@ -48,11 +54,13 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 else
                 {
                     //sync contact and case on email
+                    _trace.Trace("Syncing contact and case on email.");
                     var email = service.Retrieve(emailId.LogicalName, emailId.Id, new ColumnSet("som_case"));
 
                     var caseId = email.GetAttributeValue<EntityReference>("som_case");
 
                     var contactId = new EntityReference();
+                    _trace.Trace("Checking for case.");
                     if (caseId != null)
                     {
                         contactId = service.Retrieve(caseId.LogicalName, caseId.Id, new ColumnSet("primarycontactid"))
@@ -61,6 +69,7 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
 
                     //update existing transaction to populate the email lookup
                     //doing it like this so it's only one audit rec created instead of a create and THEN an update
+                    _trace.Trace("Updating existing transaction.");
                     var transRec = new Entity("som_transaction");
                     transRec["som_transactionid"] = Guid.Parse(transactionId);
                     transRec["som_email"] = emailId;
@@ -70,9 +79,11 @@ namespace MCSC.Plugin.ConvertEmailToTransaction
                 }
 
                 //loop through each attachmentid in list and create a note, attach file
+                _trace.Trace("Creating notes with attachments.");
                 CreateNotesWithAttachment(service, Guid.Parse(transactionId), attachmentIdList);
 
                 //pass the transactionid as the output parameter back to the JS that called the action
+                _trace.Trace("Setting output parameter.");
                 context.OutputParameters["RedirectTransactionId"] = transactionId;
             }
             catch (Exception ex)

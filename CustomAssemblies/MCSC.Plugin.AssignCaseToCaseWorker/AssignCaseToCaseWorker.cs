@@ -16,8 +16,9 @@ namespace MCSC.Plugin.AssignCaseToCaseWorker
         const int LOG_ENTRY_SEVERITY_ERROR = 186_690_001;
         public void Execute(IServiceProvider serviceProvider)
         {
-            _trace.Trace("Initializing services and context.");
             _trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            _trace.Trace("Initializing services and context.");
+
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var service = ((IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory))).CreateOrganizationService(context.UserId);
 
