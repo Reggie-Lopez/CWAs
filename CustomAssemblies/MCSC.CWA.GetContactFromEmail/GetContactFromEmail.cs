@@ -96,8 +96,8 @@ namespace MCSC.CWA.GetContactFromEmail
                     ["som_name"] = ex.Message,
                     ["som_details"] = ex.StackTrace,
                     ["som_severity"] = new OptionSetValue(LOG_ENTRY_SEVERITY_ERROR),
-                    ["som_recordlogicalname"] = $"systemuser",
-                    ["som_recordid"] = $"{context?.UserId}",
+                    ["som_recordlogicalname"] = $"{context?.PrimaryEntityName}",
+                    ["som_recordid"] = $"{context?.PrimaryEntityId}",
                 });
 
               
